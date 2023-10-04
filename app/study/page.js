@@ -5,8 +5,11 @@ import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
 import { useParams } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
+import { registerLikert } from '../widgets/QuestionLikertModel';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+registerLikert();
 
 export default function Home() {
 
@@ -40,6 +43,17 @@ export default function Home() {
 
   let surveyJson = data[0]["groups"][group]["time_periods"][session]["protocol"]
   const survey = new Model(surveyJson);
+
+  // const SurveyPdf = await import(/* webpackChunkName: "survey-viewer" */ 'survey-pdf/survey.pdf');
+   // New import 
+  //  noUiWidget(SurveyCore, noUiSlider);
+  //  noUiWidget(SurveyCore, noUiSlider);
+  //  noUiWidgetTLX(SurveyCore, noUiSlider);
+  //  noUiWidgetCustom(SurveyCore, noUiSlider);
+   // likert(survey);
+
+  //  likertMatrix(SurveyCore);
+
 
 
   return (
