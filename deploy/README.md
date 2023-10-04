@@ -29,8 +29,8 @@ https://gitlab.com/peac2h/experience-companion
 Il est construit avec [Pkg](https://github.com/zeit/pkg). 
 
 ```
-pkg index.js --targets node12-win-x64
-
+npm install -g pkg
+pkg index.js --targets node16-win-x64
 ```
 
 Il est déployé sur Dropbox avec les contenus du dossier `dist` qui permettent de changer le port. 
