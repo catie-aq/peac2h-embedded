@@ -20,6 +20,28 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+
+
+### Install JSON Server
+
+`npm install -g json-server` 
+
+The JSON export must contain a study with only one key
+as pointed out there: https://github.com/typicode/json-server/issues/435 . 
+
+In the current export you must clean the first keys and keep the groups
+or add a study key.
+
+``` json
+{"studies" : [{"id": "toto", ... JSON ... }]} 
+```
+
+
+
+### Start JSON Server
+
+`json-server --watch db.json --port 3003`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

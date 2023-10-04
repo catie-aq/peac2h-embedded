@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "13.5.4"
+    "survey-react-ui": "^1.9.111",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "autoprefixer": "^10",
