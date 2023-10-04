@@ -21,6 +21,13 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 
+## Run both with foreman 
+
+
+Install foreman to run the two servers at the same time: `gem install foreman`. 
+
+Then run both with `foreman start`. 
+
 
 ### Install JSON Server
 
