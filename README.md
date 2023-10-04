@@ -30,10 +30,10 @@ The JSON export must contain a study with only one key
 as pointed out there: https://github.com/typicode/json-server/issues/435 . 
 
 In the current export you must clean the first keys and keep the groups
-or add a study key.
+or add a study key. Remove the first `{`. 
 
 ``` json
-{"studies" : [{"id": "toto", ... JSON ... }]} 
+{"studies" : [{"id": "toto", ... JSON ... ]} 
 ```
 
 
