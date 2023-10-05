@@ -51,7 +51,7 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
                         Passer
                       </Button> 
                     </Link>
-                    <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
+                    <Link href={`/review?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
                       <Button size="sm">
                         Revoir
                       </Button> 
