@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+## Next steps 
+
+
+* result saving.
+* result list.
+* result viewing. 
+* Automatic format from  study.json to db.json. 
+* UI for it ? 
+
+
 ## Getting Started
 
 First, run the development server:
