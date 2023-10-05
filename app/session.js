@@ -78,7 +78,7 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
 
       </CardBody>
       <Divider/>
-      <CardFooter>
+      {/* <CardFooter>
         <Link
           isExternal
           showAnchorIcon
@@ -86,7 +86,7 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
         >
           Visit source code on GitHub.
         </Link>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }
