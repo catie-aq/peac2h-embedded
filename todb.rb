@@ -16,7 +16,8 @@ data = JSON.parse(file_data)
 data["id"] = "imported"
  
 final_data = {"studies" => [data], 
-              "results" => []} 
+              "results" => [],
+              "subjects" => []} 
 
 File.open("db.json", "w") do |f|
   f.write(JSON.pretty_generate(final_data))
