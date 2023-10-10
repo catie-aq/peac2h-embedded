@@ -6,6 +6,11 @@
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
 
+html {
+  font-family: var(--font-inter);
+}
+ 
+
 /* 
 :root {
   --foreground-rgb: 0, 0, 0;
