@@ -21,7 +21,6 @@ final_data = subjects.map do |subject|
   s["subject_id"] = subject["id"]
   result = {}
 
-  
   subject.each do |key, value| 
     if(key.start_with?("result-S")) 
       result = result.merge(value)

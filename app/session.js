@@ -6,23 +6,15 @@ import {Button, ButtonGroup} from "@nextui-org/react";
 
 export default function Session({session, s_idx, g_idx, group, subjects}) {
 
-
-  console.log("Session", session);
   let session_name = session["name"]
   if(session_name === "" || session_name === undefined){
     session_name = "(sans nom)"
   }
 
   return (
-    <Card className="max-w-[400px]">
+    <Card className="max-w-[30em]">
       <CardHeader className="flex gap-3">
-        <Image
-          alt="nextui logo"
-          height={40}
-          radius="sm"
-          src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-          width={40}
-        />
+
         <div className="flex flex-col">
           <p className="text-md">
              { group["name"] } </p>
@@ -32,11 +24,8 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
         </div>
       </CardHeader>
       <Divider/>
-      <CardBody>
-        
-          <div className="flex gap-2">
-   
-
+      <CardBody>        
+        <div className="flex gap-2">
           <div className="flex gap-2 flex-col">
             { subjects.map((subject) => { 
               return ( 
@@ -67,11 +56,11 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
           </div>
 
           { subjects.map((subject, s_idx) => { 
-              <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject}`}>
+            <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject}`}>
               <Button size="md">
-              Passer
+                Passer
               </Button> 
-              </Link>
+            </Link>
           }) }
     
        </div>

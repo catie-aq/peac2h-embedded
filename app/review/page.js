@@ -40,21 +40,16 @@ export default function Home() {
   if (loading1) return <div>chargement 1...</div>
   if (loading2) return <div>chargement 2...</div>
 
-  console.log("Current Group: ", params.get("group"));
-  console.log("Current Session: ", params.get("session"));
-  console.log("Loading: group: ", group, " session:", session);
 
   let surveyJson = study[0]["groups"][group]["time_periods"][session]["protocol"]
   const survey = new Model(surveyJson);
 
-  console.log("subjectData: ", subjectData);
   if(subjectData){
     let SurveyData = subjectData["result-S" + session];
     survey.data = SurveyData;
     survey.mode = "display";
   // survey.showPreview();
   }
-
 
     // survey.onComplete.add(function (sender, options) {
     //   // Display the "Saving..." message (pass a string value to display a custom message)

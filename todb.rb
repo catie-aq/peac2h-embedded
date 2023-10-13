@@ -16,7 +16,6 @@ data = JSON.parse(file_data)
 data["id"] = "imported"
  
 final_data = {"studies" => [data], 
-              "results" => [],
               "subjects" => []} 
 
 File.open("db.json", "w") do |f|

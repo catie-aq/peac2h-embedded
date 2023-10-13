@@ -33,14 +33,10 @@ export default function Home() {
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
 
-  console.log("Current Group: ", params.get("group"));
-  console.log("Current Session: ", params.get("session"));
 
   let group = parseInt(params.get("group"));
   let session = parseInt(params.get("session"));
   let subject = params.get("subject");
-
-  console.log("Loading: group: ", group, " session:", session);
 
   let surveyJson = data[0]["groups"][group]["time_periods"][session]["protocol"]
   const survey = new Model(surveyJson);
