@@ -41,7 +41,19 @@ Serializer.addClass(
     choices: ["Slider", "Sketch", "Compact"],
     category: "general",
     visibleIndex: 2 // Place after the Name and Title
-  }, {
+  },
+  
+  {
+    name: "rateDataValues:itemvalues",
+    category: "Barème",
+    default: [{value: 0, text: "Pas du tout d'accord"},
+              {value: 1, text: "Pas d’accord"},
+              {value: 2, text: "Neutre"},
+              {value: 3, text: "D'accord"}, 
+              {value: 4, text: "Tout à fait d'accord"}],
+  },
+  
+  {
     name: "disableAlpha:boolean",
     dependsOn: "likertType",
     visibleIf: function (obj) {
@@ -55,6 +67,7 @@ Serializer.addClass(
   },
   "question"
 );
+
 
 
 // Widget rendering 
@@ -76,6 +89,10 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
   get value() {
     return this.question.value;
   }
+
+  // get rateDataValues(){
+  //   return this.qu
+  // }
   get disableAlpha() {
     return this.question.disableAlpha;
   }
@@ -94,9 +111,39 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
 
   renderLikert(type) {
 
+    let rateDataValues = this.question.rateDataValues
+
+    if(rateDataValues === undefined){
+      // TODO: find how to reference the serializer.. 
+      rateDataValues = [{value: 0, text: "Pas du tout d'accord"},
+                                    {value: 1, text: "Pas d’accord"},
+                                    {value: 2, text: "Neutre"},
+                                    {value: 3, text: "D'accord"}, 
+                                    {value: 4, text: "Tout à fait d'accord"}]
+    }
+
+    console.log(rateDataValues)
+    // console.log(this, this.question)
+    if(this.question === undefined ) {
+      return (
+        <h1> Question undefined... </h1>
+      )
+    }
+
     return ( 
+      <>
       <h1> Hello World </h1>
+
+      { 
+        rateDataValues.map( (rateDataValue) =>{
+          return (<div onClick={ () => {this.question.value = rateDataValue.value} }> {rateDataValue.text} - {rateDataValue.value } </div>)
+        }
+      )
+      }
+      </>
     )
+
+
   } 
 
   renderElement() {
