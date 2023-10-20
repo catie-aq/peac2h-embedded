@@ -30,16 +30,16 @@ yarn install
 pkg -t node16-win-x64,node16-linux-x64 index.js -o peac2h-embedded
 
 # Build windows and linux binary for converter
-pkg -t node16-win-x64,node16-linux-x64 convert.js -o study-to-db
+# pkg -t node16-win-x64,node16-linux-x64 convert.js -o study-to-db
 
 rm linux.tar.gz
 rm windows.zip
 
 tar -czf "linux.tar.gz" peac2h-embedded-linux study-to-db-linux db.json public
-zip windows.zip peac2h-embedded-win.exe study-to-db-win.exe db.json public
+zip -r windows.zip peac2h-embedded-win.exe study-to-db-win.exe db.json public
 
 ## Cleanup 
-#rm db.json 
-#rm -rf public
-#rm peac2h-embedded-win.exe peac2h-embedded-linux
-# rm study-to-db-win.exe study-to-db-linux
+rm db.json 
+rm -rf public
+rm peac2h-embedded-win.exe peac2h-embedded-linux
+rm study-to-db-win.exe study-to-db-linux
