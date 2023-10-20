@@ -1,1 +1,7 @@
 node_modules
+peac2h-embedded*
+*.zip 
+*tar.gz
+build
+public
+db.json
