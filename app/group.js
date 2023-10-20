@@ -24,7 +24,6 @@ export default function Group({group, g_idx}) {
   } 
 
   let subjects = data;
-  console.log("Subjects", subjects);
  
   let createSubject = () => {
     fetch('http://localhost:3003/subjects', {

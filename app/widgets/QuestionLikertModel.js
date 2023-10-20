@@ -65,7 +65,19 @@ Serializer.addClass(
     choices: ["Slider", "Sketch", "Compact"],
     category: "general",
     visibleIndex: 2 // Place after the Name and Title
-  }, {
+  },
+  
+  {
+    name: "rateDataValues:itemvalues",
+    category: "Barème",
+    default: [{value: 0, text: "Pas du tout d'accord"},
+              {value: 1, text: "Pas d’accord"},
+              {value: 2, text: "Neutre"},
+              {value: 3, text: "D'accord"}, 
+              {value: 4, text: "Tout à fait d'accord"}],
+  },
+  
+  {
     name: "disableAlpha:boolean",
     dependsOn: "likertType",
     visibleIf: function (obj) {
@@ -101,6 +113,7 @@ Serializer.addClass(
 );
 
 
+
 // Widget rendering 
 
 // Register our widget
@@ -119,6 +132,10 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
   get value() {
     return this.question.value;
   }
+
+  // get rateDataValues(){
+  //   return this.qu
+  // }
   get disableAlpha() {
     return this.question.disableAlpha;
   }
@@ -137,9 +154,57 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
 
   renderLikert(name, id) {
 
+    let rateDataValues = this.question.rateDataValues
+
+    if(rateDataValues === undefined){
+      // TODO: find how to reference the serializer.. 
+      rateDataValues = [{value: 0, text: "Pas du tout d'accord"},
+                                    {value: 1, text: "Pas d’accord"},
+                                    {value: 2, text: "Neutre"},
+                                    {value: 3, text: "D'accord"}, 
+                                    {value: 4, text: "Tout à fait d'accord"}]
+    }
+
+    console.log(rateDataValues)
+    // console.log(this, this.question)
+    if(this.question === undefined ) {
+      return (
+        <h1> Question undefined... </h1>
+      )
+    }
+
+    
+    let selectionAction = (value) =>{
+
+      
+      this.question.value = value;
+    }
+
+
     return ( 
-      <h1> {name} {id} </h1>
+      <>
+
+      <div className="flex flex-nowrap gap-3 likert"> 
+        { 
+          rateDataValues.map( (rateDataValue) =>{
+
+            let selection = this.question.value == rateDataValue.value ? "likert-item likert-item-selected" : "likert-item";
+            return (
+              <div className={selection} 
+                   onClick={ () => {this.question.value = rateDataValue.value} }>  
+                  
+                  {rateDataValue.text}
+                  
+              </div>
+            )
+          }
+        )
+        } 
+      </div>
+      </>
     )
+
+
   } 
 
   renderElement() {
