@@ -2,9 +2,9 @@ import { createElement } from "react";
 import { Question, ElementFactory,  Serializer  } from "survey-core";
 import { SurveyQuestionElementBase, ReactQuestionFactory } from "survey-react-ui";
 
-import './likert.scss';
-
 const CUSTOM_TYPE = "likert";
+
+import "./likert.scss"
 
 export class QuestionLikertModel extends Question {
   getType() {
@@ -15,28 +15,6 @@ export class QuestionLikertModel extends Question {
   }
   set likertType(val) {
     this.setPropertyValue("likertType", val);
-  }
-
-  get rateMin() {
-    return this.getPropertyValue("rateMin");
-  }
-  set rateMin(val) {
-    this.setPropertyValue("rateMin", val);
-  }
-
-  get rateMax() {
-    return this.getPropertyValue("rateMax");
-  }
-  set rateMax(val) {
-    this.setPropertyValue("rateMax", val);
-  }
-
-  get rateValues() {
-    return this.getPropertyValue("rateValues");
-  }
-
-  set rateValues(val) {
-    this.setPropertyValue("rateValues", val);
   }
 
   // Methods --- from example 
@@ -85,27 +63,7 @@ Serializer.addClass(
     },
     category: "general",
     visibleIndex: 3 // Place after the Name, Title, and Color Picker Type
-  },
-  {
-    name: "rateMin:number",
-    category: "Barème",
-    default: 1
-  }, 
-  {
-    name: "rateMax:number",
-    category: "Barème",
-    default: 5,
-  },
-  {
-    name: "rateValues:itemvalues",
-    category: "Barème",
-    default: [{value: 0, text: "Pas du tout d'accord"},
-              {value: 1, text: "Pas d’accord"},
-              {value: 2, text: "Neutre"},
-              {value: 3, text: "D'accord"}, 
-              {value: 4, text: "Tout à fait d'accord"}],
-  }
-  ],
+  }],
   function () {
     return new QuestionLikertModel("");
   },
@@ -115,6 +73,7 @@ Serializer.addClass(
 
 
 // Widget rendering 
+
 
 // Register our widget
 ReactQuestionFactory.Instance.registerQuestion(CUSTOM_TYPE, (props) => {
@@ -152,7 +111,7 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
       || this.question.isDesignMode ? { pointerEvents: "none" } : undefined;
   }
 
-  renderLikert(name, id) {
+  renderLikert(type) {
 
     let rateDataValues = this.question.rateDataValues
 
@@ -209,25 +168,9 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
 
   renderElement() {
     
-    let elements = this.question.getPropertyValue("rateValues"); 
-    if(elements == null || elements == undefined) {
-
-      return (
-        <div style={this.style}>
-          <h1> No elements </h1>
-        </div>
-      );
-    }
-
-    console.log("elements: ", elements);
-
     return (
       <div style={this.style}>
-        { elements.map((item) => {  
-          return this.renderLikert(item.text, item.id);
-        }) }
-
-
+        {this.renderLikert(this.type)}
       </div>
     );
   }

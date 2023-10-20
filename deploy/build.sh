@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # save the current and base directories
-executeDir=$(dirname "$(readlink -f "$0")")
 baseDir=$(pwd)
 
 
@@ -10,14 +9,14 @@ baseDir=$(pwd)
 command -v pkg >/dev/null 2>&1 || { echo >&2 "PKG is required but it's not installed. Aborting."; exit 1; }
 
 # Get back to the current folder if not already
-cd "${baseDir}"
+cd ${baseDir}
 
-# Build the app
-cd ..
-# yarn build
+## Go to parent directory 
+cd ${baseDir}/../
+yarn build
 
 # Get back to the current folder
-cd "${executeDir}"
+cd "${baseDir}"
 
 # Copy the folder and the file
 cp -r ../out ./public
@@ -27,20 +26,20 @@ cp ../db.json ./db.json
 yarn install
 # Compile the exe for index.js with PKG
 
-# pkg -t node16-win-x64,node16-linux-x64 index.js
+# Build windows and linux binary for JSON-server
 pkg -t node16-win-x64,node16-linux-x64 index.js -o peac2h-embedded
-# Create an archive named after the OS
 
+# Build windows and linux binary for converter
 pkg -t node16-win-x64,node16-linux-x64 convert.js -o study-to-db
 
-tar -czf "linux.tar.gz"  peac2h-embedded-linux study-to-db-linux db.json public
+rm linux.tar.gz
+rm windows.zip
+
+tar -czf "linux.tar.gz" peac2h-embedded-linux study-to-db-linux db.json public
 zip windows.zip peac2h-embedded-win.exe study-to-db-win.exe db.json public
 
 ## Cleanup 
-rm db.json 
-rm -rf public
-rm peac2h-embedded-win.exe peac2h-embedded-linux
-rm study-to-db-win.exe peac2h-embedded-linux
-# run the script for windows and then linux
-# package "win"
-# package "linux"
+#rm db.json 
+#rm -rf public
+#rm peac2h-embedded-win.exe peac2h-embedded-linux
+# rm study-to-db-win.exe study-to-db-linux
