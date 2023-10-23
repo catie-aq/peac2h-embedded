@@ -1,5 +1,5 @@
 {
-  "name": "peac2h-embedded-server",
+  "name": "peac2h-embedded-converter",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "commander": "^11.1.0"
   },
   "devDependencies": {
     "request": "^2.81.0",
