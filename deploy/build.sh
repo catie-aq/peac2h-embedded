@@ -39,6 +39,7 @@ tar -czf "linux.tar.gz" peac2h-embedded-linux db.json public
 zip -r windows.zip peac2h-embedded-win.exe db.json public
 
 ## Cleanup 
-rm db.json 
-rm -rf public
-rm peac2h-embedded-win.exe peac2h-embedded-linux
+# rm db.json 
+# rm -rf public
+# rm peac2h-embedded-win.exe peac2h-embedded-linux
+tar -czf public.tar.gz public
