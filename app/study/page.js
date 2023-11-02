@@ -27,6 +27,17 @@ export default function Home() {
   let session = parseInt(params.get("session"));
   let subject = params.get("subject");
 
+
+  const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
+  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWR('http://localhost:3003/subjects/'+ subject, fetcher)
+
+  if (error) return <div>échec du chargement</div>
+  if (isLoading) return <div>chargement...</div>
+  if (errorUser) return <div>échec du chargement</div>
+  if (isLoadingUser) return <div>chargement...</div>
+
+  // xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
+
   let surveyJson = data[0]["groups"][group]["time_periods"][session]["protocol"]
   const survey = new Model(surveyJson);
 
