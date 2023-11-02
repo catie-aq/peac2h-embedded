@@ -19,7 +19,6 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
 
     let inProgress = subject.hasOwnProperty("partial-S" + s_idx)
     let finished = !subject["partial-S" + s_idx]
-    console.log("inProgress ?", inProgress, finished)
     let seeResults = (<></>); 
 
     let finishText = "Continuer"

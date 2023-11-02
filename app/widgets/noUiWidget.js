@@ -160,7 +160,7 @@ function init(Survey, noUiSlider) {
     },
   };
   
-  console.log(Survey);
+  // console.log(Survey);
   Survey.CustomWidgetCollection.Instance.add(widget, "customtype");
 }
 

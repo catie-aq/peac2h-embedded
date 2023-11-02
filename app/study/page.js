@@ -45,7 +45,7 @@ export default function Home() {
       xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
 
       xhr.onload = xhr.onerror = function () {
-        console.log("Response LOAD: ", xhr);
+        // console.log("Response LOAD: ", xhr);
         if (xhr.status == 200 || xhr.status == 201) {
           // Display the "Success" message (pass a string value to display a custom message)
           // Alternatively, you can clear all messages:
@@ -54,7 +54,6 @@ export default function Home() {
           // Display the "Error" message (pass a string value to display a custom message)
         }
       };
-
       let finalData = {}; 
       finalData["result-S" + session] = sender.data; 
       finalData["partial-S" + session] = true;
@@ -72,7 +71,7 @@ export default function Home() {
 
     xhr.onload = xhr.onerror = function () {
 
-      console.log("Response LOAD: ", xhr);
+      // console.log("Response LOAD: ", xhr);
       if (xhr.status == 200 || xhr.status == 201) {
         // Display the "Success" message (pass a string value to display a custom message)
         options.showSaveSuccess();

@@ -15,20 +15,12 @@ export default function Home() {
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
- 
-  if(data){
-    console.log(data[0]["id"]);
-  }
   
   let groups = data[0]["groups"] 
   let surveyJson = data[0]["groups"][0]["time_periods"][0]["protocol"]
   
-  console.log("Study: ", data[0]);
-  console.log("Groups", groups);
-
   let name = data[0]["name"]
   
-
   return (
     <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">

@@ -124,7 +124,7 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
                                     {value: 4, text: "Tout à fait d'accord"}]
     }
 
-    console.log(rateDataValues)
+    // console.log(rateDataValues)
     // console.log(this, this.question)
     if(this.question === undefined ) {
       return (
