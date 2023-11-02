@@ -14,19 +14,11 @@ registerLikert();
 
 export default function Home() {
 
-  // let study = fetchStudies();
-
-  const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
   const params = useSearchParams()
-
-  if (error) return <div>échec du chargement</div>
-  if (isLoading) return <div>chargement...</div>
-
 
   let group = parseInt(params.get("group"));
   let session = parseInt(params.get("session"));
   let subject = params.get("subject");
-
 
   const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
   const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWR('http://localhost:3003/subjects/'+ subject, fetcher)
@@ -42,6 +34,34 @@ export default function Home() {
   const survey = new Model(surveyJson);
 
   survey.applyTheme(theme);
+
+  survey.data = dataUser["result-S" + session]
+
+  survey.onCurrentPageChanging.add(function (sender, options) {
+    // Display the "Saving..." message (pass a string value to display a custom message)
+    if(options.isNextPage){
+      const xhr = new XMLHttpRequest();
+      xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
+      xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+
+      xhr.onload = xhr.onerror = function () {
+        console.log("Response LOAD: ", xhr);
+        if (xhr.status == 200 || xhr.status == 201) {
+          // Display the "Success" message (pass a string value to display a custom message)
+          // Alternatively, you can clear all messages:
+          // options.clearSaveMessages();
+        } else {
+          // Display the "Error" message (pass a string value to display a custom message)
+        }
+      };
+
+      let finalData = {}; 
+      finalData["result-S" + session] = sender.data; 
+      finalData["partial-S" + session] = true;
+
+      xhr.send(JSON.stringify(finalData));
+    }
+  });
 
   survey.onComplete.add(function (sender, options) {
     // Display the "Saving..." message (pass a string value to display a custom message)
@@ -66,7 +86,7 @@ export default function Home() {
 
     let finalData = {}; 
     finalData["result-S" + session] = sender.data;
-
+    finalData["partial-S" + session] = false;
     xhr.send(JSON.stringify(finalData));
   });
 
