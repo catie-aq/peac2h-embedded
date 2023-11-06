@@ -30,7 +30,10 @@ export default function Home() {
 
   // xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
 
-  let surveyJson = data[0]["groups"][group]["time_periods"][session]["protocol"]
+  let group_data = data[0]["groups"][group]["time_periods"]
+  let session_data = group_data.find((time_period) => time_period["position"] == session);
+  let surveyJson = session_data["protocol"]
+
   const survey = new Model(surveyJson);
 
   survey.applyTheme(theme);
@@ -57,6 +60,8 @@ export default function Home() {
       let finalData = {}; 
       finalData["result-S" + session] = sender.data; 
       finalData["partial-S" + session] = true;
+      
+      finalData["result-S" + session].pageNo = survey.currentPageNo + 1;
 
       xhr.send(JSON.stringify(finalData));
     }
@@ -85,6 +90,7 @@ export default function Home() {
 
     let finalData = {}; 
     finalData["result-S" + session] = sender.data;
+    finalData["result-S" + session].pageNo = survey.currentPageNo + 1;
     finalData["partial-S" + session] = false;
     xhr.send(JSON.stringify(finalData));
   });

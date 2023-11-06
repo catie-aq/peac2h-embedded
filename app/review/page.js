@@ -29,8 +29,11 @@ export default function Home() {
   if (loading1) return <div>chargement 1...</div>
   if (loading2) return <div>chargement 2...</div>
 
+  //let surveyJson = study[0]["groups"][group]["time_periods"][session]["protocol"]
+  let group_data = data[0]["groups"][group]["time_periods"]
+  let session_data = group_data.find((time_period) => time_period["position"] == session);
+  let surveyJson = session_data["protocol"]
 
-  let surveyJson = study[0]["groups"][group]["time_periods"][session]["protocol"]
   const survey = new Model(surveyJson);
   survey.applyTheme(theme);
 
