@@ -38,7 +38,7 @@ export default function Group({group, g_idx}) {
     })
       .then(response => response.json())
       .then(data => { 
-        console.log("Creation", data)
+        // console.log("Creation", data)
 
         // Ask for revalidation
         setuserId("");

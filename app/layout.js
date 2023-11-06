@@ -1,4 +1,4 @@
-import './globals.css'
+import './globals.scss'
 import { Providers } from './providers'
 
 import { Inter } from 'next/font/google'

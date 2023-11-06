@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 
+const path = require('path')
+
 const nextConfig = {
   output: 'export',
- 
+  
   images: { unoptimized: true },
   // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
   // trailingSlash: true,

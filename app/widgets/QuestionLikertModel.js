@@ -4,6 +4,8 @@ import { SurveyQuestionElementBase, ReactQuestionFactory } from "survey-react-ui
 
 const CUSTOM_TYPE = "likert";
 
+import "./likert.scss"
+
 export class QuestionLikertModel extends Question {
   getType() {
     return CUSTOM_TYPE;
@@ -122,7 +124,7 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
                                     {value: 4, text: "Tout à fait d'accord"}]
     }
 
-    console.log(rateDataValues)
+    // console.log(rateDataValues)
     // console.log(this, this.question)
     if(this.question === undefined ) {
       return (
@@ -130,16 +132,34 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
       )
     }
 
+    
+    let selectionAction = (value) =>{
+
+      
+      this.question.value = value;
+    }
+
+
     return ( 
       <>
-      <h1> Hello World </h1>
 
-      { 
-        rateDataValues.map( (rateDataValue) =>{
-          return (<div onClick={ () => {this.question.value = rateDataValue.value} }> {rateDataValue.text} - {rateDataValue.value } </div>)
-        }
-      )
-      }
+      <div className="flex flex-nowrap gap-3 likert"> 
+        { 
+          rateDataValues.map( (rateDataValue) =>{
+
+            let selection = this.question.value == rateDataValue.value ? "likert-item likert-item-selected" : "likert-item";
+            return (
+              <div className={selection} 
+                   onClick={ () => {this.question.value = rateDataValue.value} }>  
+                  
+                  {rateDataValue.text}
+                  
+              </div>
+            )
+          }
+        )
+        } 
+      </div>
       </>
     )
 

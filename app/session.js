@@ -11,6 +11,62 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
     session_name = "(sans nom)"
   }
 
+  let seeResults = null; 
+
+  let subjectList = subjects.map((subject) => {  
+
+    // Check if the subject has results, or finished results 
+
+    let inProgress = subject.hasOwnProperty("partial-S" + s_idx)
+    let finished = !subject["partial-S" + s_idx]
+    let seeResults = (<></>); 
+
+    let finishText = "Continuer"
+    let link = `/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
+    if(finished){
+      finishText = "Revoir"
+      link = `/review?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
+    }
+
+    if(inProgress){
+      seeResults =  ( 
+          <Link href={link}>
+            <Button size="sm">
+              {finishText}
+            </Button> 
+          </Link>
+      )
+    }
+
+    return ( 
+
+      <div>
+        <h3 className="text-sm font-light"> {subject["id"]} </h3>
+
+        <div className="flex gap-2 flex-wrap">
+          <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
+            <Button size="sm">
+              Passer
+            </Button> 
+          </Link>
+          {seeResults}
+        
+        </div>
+        
+        {/* {s_idx != 0 && <Divider/>} */}
+        
+      </div>
+    ) 
+  });
+
+  // { subjects.map((subject, s_idx) => { 
+  //   <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject}`}>
+  //     <Button size="md">
+  //       Passer
+  //     </Button> 
+  //   </Link>
+  // }) }
+
   return (
     <Card className="max-w-[30em]">
       <CardHeader className="flex gap-3">
@@ -27,41 +83,10 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
       <CardBody>        
         <div className="flex gap-2">
           <div className="flex gap-2 flex-col">
-            { subjects.map((subject) => { 
-              return ( 
-
-                <div>
-
-                  <h3 className="text-sm font-light"> {subject["id"]} </h3>
-
-                  <div className="flex gap-2 flex-wrap">
-                    <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
-                      <Button size="sm">
-                        Passer
-                      </Button> 
-                    </Link>
-                    <Link href={`/review?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
-                      <Button size="sm">
-                        Revoir
-                      </Button> 
-                    </Link>
-                  </div>
-                  
-                  {/* {s_idx != 0 && <Divider/>} */}
-                  
-                </div>
-              ) 
-              }) 
-            }
+            { subjectList }
           </div>
 
-          { subjects.map((subject, s_idx) => { 
-            <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject}`}>
-              <Button size="md">
-                Passer
-              </Button> 
-            </Link>
-          }) }
+ 
     
        </div>
 
