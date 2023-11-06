@@ -50,7 +50,7 @@ export default function Group({group, g_idx}) {
 
   // Order by position
   // thanks https://stackoverflow.com/questions/43572436/sort-an-array-of-objects-in-react-and-render-them
-  let time_periods = [].concat(group["time_periods"]).sort((a, b) => a["position"] > b["position"] ? 1 : -1)
+  let time_periods = [].concat(group["time_periods"]).sort((a, b) => a["position"] > b["position"] ? -1 : 1)
 
   return (
     <>
