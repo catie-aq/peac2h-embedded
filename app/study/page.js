@@ -1,6 +1,6 @@
 "use client"
 import 'survey-core/defaultV2.min.css';
-import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
 import { useParams } from 'next/navigation'
@@ -19,9 +19,9 @@ export default function Home() {
   let group = parseInt(params.get("group"));
   let session = parseInt(params.get("session"));
   let subject = params.get("subject");
-
-  const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
-  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWR('http://localhost:3003/subjects/'+ subject, fetcher)
+  
+  const { data, error, isLoading }= useSWRImmutable('http://localhost:3003/studies/', fetcher)
+  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWRImmutable('http://localhost:3003/subjects/'+ subject, fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
