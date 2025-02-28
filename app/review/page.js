@@ -21,11 +21,12 @@ export default function Home() {
   let group = parseInt(params.get("group"));
   let session = parseInt(params.get("session"));
   let subject = params.get("subject");
+  let studyId = parseInt(params.get("studyId"));
 
   // const { data: study, error: studyError, isLoading: loading1 }= useSWR('http://localhost:3003/studies/', fetcher)
   // const { data: subjectData, error: subjectError, isLoading: loading2 }= useSWR('http://localhost:3003/subjects/' + subject, subjectFetcher)
 
-  const { data: study, error: studyError, isLoading: loading1 }= useSWRImmutable('http://localhost:3003/studies/', fetcher)
+  const { data: study, error: studyError, isLoading: loading1 }= useSWRImmutable('http://localhost:3003/studies/' + studyId, fetcher)
   const { data: subjectData, error: subjectError, isLoading: loading2 }= useSWRImmutable('http://localhost:3003/subjects/' + subject, subjectFetcher)
 
   if (studyError || subjectError) return <div>échec du chargement</div>
@@ -34,7 +35,7 @@ export default function Home() {
   if (loading2) return <div>chargement 2...</div>
 
   //let surveyJson = study[0]["groups"][group]["time_periods"][session]["protocol"]
-  let group_data = data[0]["groups"][group]["time_periods"]
+  let group_data = study["groups"][group]["time_periods"]
   let session_data = group_data.find((time_period) => time_period["position"] == session);
   let surveyJson = session_data["protocol"]
 

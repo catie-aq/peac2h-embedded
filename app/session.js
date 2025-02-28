@@ -4,7 +4,7 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nex
 import {Button, ButtonGroup} from "@nextui-org/react";
 
 
-export default function Session({session, s_idx, g_idx, group, subjects}) {
+export default function Session({session, s_idx, g_idx, group, subjects, studyId}) {
 
   let session_name = session["name"]
   if(session_name === "" || session_name === undefined){
@@ -22,15 +22,15 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
     let seeResults = (<></>); 
 
     let finishText = "Continuer"
-    let link = `/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
+    let link = `/survey?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
     if(finished){
       finishText = "Revoir"
-      link = `/review?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
+      link = `/review?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
     }
 
     if(inProgress){
       seeResults =  ( 
-          <Link href={link}>
+          <Link href={link} target="_blank">
             <Button size="sm">
               {finishText}
             </Button> 
@@ -40,11 +40,11 @@ export default function Session({session, s_idx, g_idx, group, subjects}) {
 
     return ( 
 
-      <div>
-        <h3 className="text-sm font-light"> {subject["id"]} </h3>
+      <div key={subject["id"]}>
+        <h3 className="text-sm font-light"> {subject["name"]} </h3>
 
         <div className="flex gap-2 flex-wrap">
-          <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`}>
+          <Link href={`/survey?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`} target="_blank">
             <Button size="sm">
               Passer
             </Button> 
