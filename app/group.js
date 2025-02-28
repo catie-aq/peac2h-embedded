@@ -15,7 +15,7 @@ export default function Group({group, g_idx, studyId}) {
   const [userKey, setUserKey] = useState(0); // Declare a state variable...
   
   const { data, error, isLoading }= useSWR('http://localhost:3003/subjects/?group=' + g_idx + '&studyId=' + studyId, fetcher)
-  const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading } = useSWR('http://localhost:3003/subjects/?studyId=' + studyId, fetcher);
+  const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading, mutate: mutateAllSubjects} = useSWR('http://localhost:3003/subjects/?studyId=' + studyId, fetcher);
   const [subjectList, setSubjectList] = useState(''); // Declare a state variable...
  
   if (error || allSubjectsError){ 
@@ -35,7 +35,7 @@ export default function Group({group, g_idx, studyId}) {
     );
     
     if (alreadyExists) {
-      console.log("Subject already exists");
+      // console.log("Subject already exists");
       // 2. On termine la fonction, donc on NE fait PAS de fetch
       return;
     }
@@ -58,6 +58,7 @@ export default function Group({group, g_idx, studyId}) {
 
         // Ask for revalidation
         setuserId("");
+        mutateAllSubjects();
         mutate(`http://localhost:3003/subjects/?group=` + g_idx + '&studyId=' + studyId)
       })  
       .catch(error => console.error(error));
