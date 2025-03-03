@@ -1,5 +1,5 @@
+import * as Survey from "survey-core";
 
-/// todo Rename to LikertMatrix 
 // Handle CK and K .. 
 function init(Survey) {
   var widget = {
@@ -12,8 +12,7 @@ function init(Survey) {
       return question.getType() === "likertmatrix";
     },
     htmlTemplate: `
-      <div class='likert-matrix'>
-      </div>
+
     `,
     activatedByChanged: function (activatedBy) {
       Survey.JsonObject.metaData.addClass("likertmatrix", [], null, "empty");
@@ -23,27 +22,19 @@ function init(Survey) {
         type: "string",
       }], null, "itemvalue");
 
-      // Disabled -> not functionnal.
-      // Survey.Serializer.addProperty("likertmatrix", {
-      //   name: "Degree",
-      //   category: "Barème",
-      //   default:7,
-      //   choices: [7,5]
-      // });
 
       Survey.Serializer.addProperty("likertmatrix", {
         name: "choiceValue:itemvalues",
-        category: "Barème",
+        category: "choices",
         default: [-3,-2,-1,0,1,2,3]
       });
 
       Survey.Serializer.addProperty("likertmatrix", {
         name: "rows:itemvalues",
-        category: "Lignes",
+        category: "choices",
+        type: "itemvalue_ex[]",
         default: ["item1", "item2"]
       });
-
-      Survey.JsonObject.metaData.findProperty("likertmatrix", "rows").type = "itemvalue_ex[]";
 
     },
     afterRender: function (question, el) {
@@ -51,22 +42,34 @@ function init(Survey) {
       let results;
       question.value !== undefined ? results = question.value : results = new Object();
 
+      let isDisabled = () => { 
+        let grandparent = el.parentNode.parentNode;
+        return grandparent.classList.contains('sd-question--disabled')
+      }
 
-      let createQuestion = () => {
+      el.classList.add("likert-matrix", "grid-cols-4", "grid")
+
+      question.createQuestion = () => {
+        
+        // Cleanup
+        while (el.firstChild) {
+          el.removeChild(el.firstChild);
+        }
+        
         question.rows.forEach((questionElement,ind) => {
 
-          var row = document.createElement("div")
-          row.classList.add("likert-matrix-row")
-          row.classList.add("row-"+ (ind+1))
+          // var row = document.createElement("div")
+          // row.classList.add("likert-matrix-row")
+          // row.classList.add("row-"+ (ind+1))
 
           var divTextOne= document.createElement('div')
           var divItems= document.createElement('div')
           var divTextTwo= document.createElement('div')
 
           // First, second texts and div for items
-          divTextOne.classList.add("likert-matrix-text-one")
-          divItems.classList.add("likert-matrix-items")
-          divTextTwo.classList.add("likert-matrix-text-two")
+          divTextOne.classList.add("likert-matrix-text")
+          divItems.classList.add("likert-matrix-items", "col-span-2")
+          divTextTwo.classList.add("likert-matrix-text")
 
           var titleOne = document.createElement("span");
           var titleTwo = document.createElement("span");
@@ -82,6 +85,7 @@ function init(Survey) {
           divTextTwo.appendChild(titleTwo);
 
           var selectedItem = null;
+
           question.choiceValue.forEach((element, index) => {
             //let item= document.createElement('input')
             //let typeAttrib = item.createAttribute("type"); 
@@ -103,7 +107,10 @@ function init(Survey) {
             }
 
             item.addEventListener("click", () => {
-              selectedItem= item.getAttribute("item-id");
+              if(isDisabled()){
+                return;
+              }
+              selectedItem = item.getAttribute("item-id");
 
               // Take question name 
               // results[`Row ${(ind+1)}`] = element.text
@@ -122,25 +129,24 @@ function init(Survey) {
 
             divItems.appendChild(item)
           })
-          row.appendChild(divTextOne);
-          row.appendChild(divItems)
-          row.appendChild(divTextTwo);
 
-          el.appendChild(row)
+          el.appendChild(divTextOne);
+          el.appendChild(divItems)
+          el.appendChild(divTextTwo);
         });
 
       };
 
-      createQuestion(); 
+      question.createQuestion(); 
+      question.registerFunctionOnPropertiesValueChanged(
+        ["choiceValue", "rows"], question.createQuestion
+      );
 
-      // question.valueChangedCallback( () => { console.log("ValueChanged")});
-      // question.valueChangedCallback = createQuestion; 
-
-      //question.registerFunctionOnPropertyValueChanged("choiceValue", createQuestion);
-      //question.registerFunctionOnPropertyValueChanged("Texte2", createQuestion);   
-      //question.registerFunctionOnPropertyValueChanged("Texte2", createQuestion);
-      // question.registerFunctionOnPropertyValueChanged("texts", createQuestion); 
-
+    }, 
+    willUnmount: function (question, currentElement) { 
+      question.unRegisterFunctionOnPropertiesValueChanged(
+        ["choiceValue", "rows"], question.createQuestion
+      );
     }
   };
 
@@ -149,6 +155,8 @@ function init(Survey) {
 
 if (typeof Survey !== "undefined") {
   init(Survey);
+}else {
+  console.log("Cannot init LikertMatrix Widget")
 }
 
 export default init;

@@ -6,11 +6,17 @@ import { Survey } from 'survey-react-ui';
 import { useParams } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 import { registerLikert } from '../../app/widgets/QuestionLikertModel';
+import { registerNoUiSliderCustom } from '../../app/widgets/QuestionSliderCustomModel';
+import { registerNoUiSliderTlx } from '../widgets/QuestionSliderTlxModel';
+import { registerNoUiSliderQuestion } from '../../app/widgets/QuestionSliderModel';
 import theme from "../../app/survey-theme";
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 registerLikert();
+registerNoUiSliderQuestion();
+registerNoUiSliderCustom();
+registerNoUiSliderTlx();
 
 export default function Home() {
 

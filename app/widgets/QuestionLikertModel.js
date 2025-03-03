@@ -4,7 +4,7 @@ import { SurveyQuestionElementBase, ReactQuestionFactory } from "survey-react-ui
 
 const CUSTOM_TYPE = "likert";
 
-import "./likert.scss"
+import "./widgets.scss"
 
 export class QuestionLikertModel extends Question {
   getType() {
