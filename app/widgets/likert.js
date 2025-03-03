@@ -1,5 +1,3 @@
-
-
 function init(Survey) {
   var widget = {
     name: "likert",
@@ -15,9 +13,8 @@ function init(Survey) {
       return question.getType() === "likert";
     },
     htmlTemplate: `
-      <div class='likert'>
-        <div class='likert-container'>
-        </div>
+      <div class='likert flex flex-nowrap gap-1 xl:gap-2 flex-row items-center justify-evenly'>
+        
       </div>
     `,
     activatedByChanged: function (activatedBy) {
@@ -25,17 +22,18 @@ function init(Survey) {
       Survey.Serializer.addProperties("likert", [
         {
           name: "rateMin:number",
-          category: "Barème",
+          category: "choices",
           default: 1
         }, 
         {
           name: "rateMax:number",
-          category: "Barème",
+          category: "choices",
           default: 5,
         },
         {
-          name: "rateDataValues:itemvalues",
-          category: "Barème",
+          name: "rateDataValues",
+          type: "itemvalues",
+          category: "choices",
           default: [{value: 0, text: "Pas du tout d'accord"},
                     {value: 1, text: "Pas d’accord"},
                     {value: 2, text: "Neutre"},
@@ -48,36 +46,14 @@ function init(Survey) {
       let el = currentElement.children[0];
       var selectedItem = null;
 
-      // set all rateDataValues
-      question.rateDataValues.forEach((element, index) => {
-        var mainDiv = document.createElement("div");
-        mainDiv.classList.add("likert-item");
-        mainDiv.classList.add(question.id);
-        mainDiv.setAttribute("item-id", index);
-        var title = document.createElement("h5");
-        var elementText = document.createTextNode(element.text);
-        title.appendChild(elementText);
-        mainDiv.appendChild(title);
 
-        if(question.value == index)
-          mainDiv.classList.add("likert-item-selected");
-          mainDiv.addEventListener("click", function displayDate() {
-          selectedItem= mainDiv.getAttribute("item-id");
-          question.value = element.value;
-          let items = document.getElementsByClassName(`likert-item ${question.id}`);
-          Array.prototype.forEach.call(items, ele => {
-            if (selectedItem != ele.getAttribute("item-id"))
-              ele.classList.remove("likert-item-selected");
-            else
-              ele.classList.add("likert-item-selected");
-          });
-        });
-        el.appendChild(mainDiv);
-      });
+      let isDisabled = () => { 
+        let grandparent = currentElement.parentNode.parentNode;
+        return grandparent.classList.contains('sd-question--disabled')
+      }
 
       // TODO: update elementText when changed
-      let updateLikert = () => {
-
+      question.updateLikert = () => {
         // empty the el and then fill it with new values
         while (el.firstChild) {
           el.removeChild(el.firstChild);
@@ -89,11 +65,19 @@ function init(Survey) {
           mainDiv.classList.add("likert-item");
           mainDiv.classList.add(question.id);
           mainDiv.setAttribute("item-id", index);
+
+          if(question.value == element.value){
+            mainDiv.classList.add("likert-item-selected");
+          }
+        
           var title = document.createElement("h5");
           var elementText = document.createTextNode(element.text);
           title.appendChild(elementText);
           mainDiv.appendChild(title);
-          mainDiv.addEventListener("click", function displayDate() {
+          mainDiv.addEventListener("click", () => {
+            if(isDisabled()){
+              return;
+            }
             selectedItem= mainDiv.getAttribute("item-id");
             question.value = element.value;
             let items = document.getElementsByClassName(`likert-item ${question.id}`);
@@ -108,18 +92,15 @@ function init(Survey) {
         el.appendChild(mainDiv);
       });
       }
-
-
+      // first display
+      question.updateLikert(); 
       question.registerFunctionOnPropertiesValueChanged(
-        ["rateDataValues", "rateMin", "rateMax"],
-        updateLikert
+        ["rateDataValues", "rateMin", "rateMax"],question.updateLikert
       );
-
-      // question.registerFunctionOnPropertyValueChanged("rateDataValues", updateLikert);
-      // question.registerFunctionOnPropertyValueChanged("rateMin", updateLikert);
-      // question.registerFunctionOnPropertyValueChanged("rateMax", updateLikert);
-
-
+    },
+    willUnmount: function (question, currentElement) {
+      question.unRegisterFunctionOnPropertiesValueChanged(
+        ["rateDataValues", "rateMin", "rateMax"], question.updateLikert);
     }
   };
 
@@ -128,6 +109,8 @@ function init(Survey) {
 
 if (typeof Survey !== "undefined") {
   init(Survey);
+}else {
+  console.log("Cannot init Likert widget");
 }
 
 export default init;

@@ -24,10 +24,10 @@
   // var(--sjs-primary-backcolor, var(--primary, #19b394));
   &-item{
     background-color: white;
-    border-color: #19b394;
+    border-color: #3c4f6d;
     border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
-    color: #19b394;
+    color: #3c4f6d;
 
     font-weight: 600;
     font-size: smaller;
@@ -45,11 +45,34 @@
 
     &-selected{
       color: white;
-      background-color: #19b394;;
+      background-color: #3c4f6d;
 
      &:hover{
-      background-color: #19b394;;
+      background-color: #3c4f6d;
       }
     }
+  }
+}
+
+.sd-question--disabled .likert-item { 
+  &:hover{
+    // background-color: var(#3c4f6d);
+    // color: var(white);
+    // @include small-text; 
+    // padding: 0.5em 0.5em;
+    // border-radius: 0.8em;
+    cursor: not-allowed;
+    // border: 1px solid  var(#3c4f6d);
+  }
+
+  &-selected{
+    background-color: #c7c7c7;
+    color: white;
+    border: 1px solid #c7c7c7;
+
+    // &:hover{
+    //   background-color: white;
+    //   color: #3c4f6d;
+    // }
   }
 }
