@@ -4,7 +4,7 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nex
 import {Button, ButtonGroup} from "@nextui-org/react";
 import { mutate } from "swr";
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-
+import { convertResultsToCSV, downloadCSV } from "@/js_to_csv";
 
 export default function Session({session, s_idx, g_idx, group, subjects, studyId}) {
 
@@ -96,6 +96,7 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
             </Button> */}
             
             <DeleteSubjectButton/>
+            <button onClick={() => downloadCSV(subject, s_idx)}>csv</button>
           </CardHeader>
           
 
