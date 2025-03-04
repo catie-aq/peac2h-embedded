@@ -67,7 +67,7 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
       };
 
       return (
-        <div 
+        <button 
           onClick={async () => {
             let res = await deleteSubject(subject["id"]);
             if(res == "ok"){
@@ -78,7 +78,7 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
             }
           }}>
             x 
-        </div>
+        </button>
       )
     }
 
