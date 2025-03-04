@@ -116,6 +116,7 @@ export default function Home() {
 
   
   return (
+    <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
     <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
 
@@ -150,9 +151,9 @@ export default function Home() {
 
       <Card className="max-w-[45em] mb-8 mt-4">
         <Input type="file" ref={fileRef} justify="center"/>
-        <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+        
           <ImportStudyButton/>
-        </SnackbarProvider>
+      
         {/* <Button
           onClick={() => importStudy()}
           justify="center"
@@ -163,6 +164,7 @@ export default function Home() {
         </Card>
       </div>
     </main>
+    </SnackbarProvider>
   )
 }
 

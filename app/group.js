@@ -105,6 +105,20 @@ export default function Group({group, g_idx, studyId}) {
         </CardHeader> 
         <Divider/>
         <CardBody>
+          <h3 className="text-sm font-light"> Liste de sujets existants </h3>
+
+          <div className="flex gap-2 flex-wrap">
+            { group["subjects"].map((subject, s_idx) => {
+              return (
+                <div key={{s_idx}}>
+                  {subject["name"]}
+                </div>
+              )
+            })}
+          </div>
+        </CardBody>
+        <Divider/>
+        <CardBody>
           <h3 className="text-sm font-light"> Liste de sujets </h3> 
           <div key={g_idx} className="flex gap-2 flex-wrap">
             { subjects.map((subject, s_idx) => { 
@@ -132,9 +146,8 @@ export default function Group({group, g_idx, studyId}) {
               // defaultValue="S01"
               className="max-w-xs"
             />
-            <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-              <CreateSubjectButton/>
-            </SnackbarProvider>
+            <CreateSubjectButton/>
+            
           </div>
           </CardFooter>
         

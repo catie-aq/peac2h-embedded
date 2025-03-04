@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nextui-org/react";
 import {Button, ButtonGroup} from "@nextui-org/react";
+import { mutate } from "swr";
+import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 
 
 export default function Session({session, s_idx, g_idx, group, subjects, studyId}) {
@@ -11,6 +13,23 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
     session_name = "(sans nom)"
   }
 
+  async function deleteSubject(subjectId) {
+    fetch(`http://localhost:3003/subjects/${subjectId}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => { 
+        console.log("Deleted", data)
+        mutate(`http://localhost:3003/subjects/?group=${g_idx}&studyId=${studyId}`)
+        mutate(`http://localhost:3003/subjects/?studyId=${studyId}`)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        return error;
+      });
+      return "ok"
+  }
+
   let seeResults = null; 
 
   let subjectList = subjects.map((subject) => {  
@@ -18,54 +37,78 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
     // Check if the subject has results, or finished results 
 
     let inProgress = subject.hasOwnProperty("partial-S" + s_idx)
-    let finished = !subject["partial-S" + s_idx]
+    let finished = !subject["partial-S" + s_idx] && subject["partial-S" + s_idx] != undefined
     let seeResults = (<></>); 
 
-    let finishText = "Continuer"
+    let finishText = "Passer"
+    if(inProgress){
+      finishText = "Continuer"
+    }
     let link = `/survey?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
     if(finished){
       finishText = "Revoir"
       link = `/review?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`
     }
 
-    if(inProgress){
-      seeResults =  ( 
-          <Link href={link} target="_blank">
-            <Button size="sm">
-              {finishText}
-            </Button> 
-          </Link>
+    seeResults =  ( 
+      <Link href={link} target="_blank">
+        <Button size="sm">
+          {finishText}
+        </Button> 
+      </Link>
+    )
+
+    function DeleteSubjectButton() {
+      const { enqueueSnackbar } = useSnackbar();
+        
+      function handleClickVariant(variant, message){
+        // variant could be success, error, warning, info, or default
+        enqueueSnackbar(message, { variant });
+      };
+
+      return (
+        <div 
+          onClick={async () => {
+            let res = await deleteSubject(subject["id"]);
+            if(res == "ok"){
+              handleClickVariant('info','Sujet supprimé !');
+            }
+            else{
+              handleClickVariant('error','Erreur lors de la suppression');
+            }
+          }}>
+            x 
+        </div>
       )
     }
+
 
     return ( 
 
       <div key={subject["id"]}>
-        <h3 className="text-sm font-light"> {subject["name"]} </h3>
+        <Card>
+          <CardHeader className="flex gap-10 justify-between">
+            <h3 className="text-sm font-light"> {subject["name"]} </h3>
+            {/* <Button 
+              className="corner"
+              onClick={() => deleteSubject(subject["id"])}>
+                x 
+            </Button> */}
+            
+            <DeleteSubjectButton/>
+          </CardHeader>
+          
 
-        <div className="flex gap-2 flex-wrap">
-          <Link href={`/survey?studyId=${studyId}&group=${g_idx}&session=${s_idx}&subject=${subject["id"]}`} target="_blank">
-            <Button size="sm">
-              Passer
-            </Button> 
-          </Link>
-          {seeResults}
+          <div className="flex gap-2 flex-wrap">
+            {seeResults}
+          
+          </div>
+        </Card>
         
-        </div>
-        
-        {/* {s_idx != 0 && <Divider/>} */}
         
       </div>
     ) 
   });
-
-  // { subjects.map((subject, s_idx) => { 
-  //   <Link href={`/study?group=${g_idx}&session=${s_idx}&subject=${subject}`}>
-  //     <Button size="md">
-  //       Passer
-  //     </Button> 
-  //   </Link>
-  // }) }
 
   return (
     <Card className="max-w-[30em]">

@@ -9,6 +9,7 @@ import Group from '../group'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import {Button } from "@nextui-org/react";
+import { SnackbarProvider } from 'notistack';
 
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -31,6 +32,7 @@ export default function Home() {
   let name = data["name"]
   
   return (
+    <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
     <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
 
@@ -56,5 +58,6 @@ export default function Home() {
      
       </div>
     </main>
+    </SnackbarProvider>
   )
 }
