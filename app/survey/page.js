@@ -9,6 +9,7 @@ import { registerLikert } from '../../app/widgets/QuestionLikertModel';
 import { registerNoUiSliderCustom } from '../../app/widgets/QuestionSliderCustomModel';
 import { registerNoUiSliderTlx } from '../widgets/QuestionSliderTlxModel';
 import { registerNoUiSliderQuestion } from '../../app/widgets/QuestionSliderModel';
+import { registerLikertMatrix } from '../widgets/QuestionLikertMatrixModel';
 import theme from "../../app/survey-theme";
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -17,6 +18,7 @@ registerLikert();
 registerNoUiSliderQuestion();
 registerNoUiSliderCustom();
 registerNoUiSliderTlx();
+registerLikertMatrix();
 
 export default function Home() {
 

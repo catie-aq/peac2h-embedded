@@ -132,6 +132,12 @@
   }
 }
 
+.sd-question--disabled .likert-matrix, .sd-question--disabled .likert-matrix-item {
+  &:hover {
+    cursor: not-allowed;
+  }
+}
+
 
 ////////// Slider //////////
 

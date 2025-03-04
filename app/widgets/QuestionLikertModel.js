@@ -147,7 +147,7 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
     return ( 
       <>
 
-      <div className="flex flex-nowrap gap-3 likert"> 
+      <div className="flex flex-nowrap gap-8 likert justify-center"> 
         { 
           rateDataValues.map( (rateDataValue, idx) =>{
 
