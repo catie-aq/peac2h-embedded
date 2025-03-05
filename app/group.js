@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 
-import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Link} from "@nextui-org/react";
+import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Input, Link, Tooltip} from "@nextui-org/react";
 import Session from "./session";
 import useSWR from 'swr'
 import { useSWRConfig } from "swr"
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
+import { convertResultsToCSVGroup, downloadCSVGroup } from "@/js_to_csv";
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
@@ -95,6 +98,37 @@ export default function Group({group, g_idx, studyId}) {
   // thanks https://stackoverflow.com/questions/43572436/sort-an-array-of-objects-in-react-and-render-them
   let time_periods = [].concat(group["time_periods"]).sort((a, b) => a["position"] > b["position"] ? 1 : -1)
 
+  let DownloadGroupResultButton = (<></>)
+
+  if (time_periods.length === 1) {
+    const session = time_periods[0]["position"]
+    DownloadGroupResultButton = (
+      <Tippy content="Télécharger les résultats de tous les sujets de ce groupe">
+        <button onClick={() => downloadCSVGroup(subjects, g_idx, session)}>csv</button>
+      </Tippy>)
+  }
+  else {
+    DownloadGroupResultButton = (
+      <Tippy
+        interactive 
+        placement="bottom"
+        content={
+          <div className="flex flex-col gap-2">
+            {time_periods.map((time_period, t_idx) => (
+    
+              <button key={t_idx} onClick={() => downloadCSVGroup(subjects, g_idx, time_period["position"])}>csv {time_period.name}</button>
+              
+            ))}
+          </div>
+        }
+        >
+        <button>
+        CSV
+      </button>
+      </Tippy>)
+  }
+  
+
   return (
     <>
 
@@ -102,6 +136,10 @@ export default function Group({group, g_idx, studyId}) {
         <CardHeader className="flex gap-3">
 
         <h2 className="text-lg"> {group["name"]}  </h2>
+        {/* <Tippy content="Télécharger les résultats de tous les sujets de ce groupe">
+          <button onClick={() => downloadCSVGroup(subjects, g_idx)}>csv</button>
+        </Tippy> */}
+        {DownloadGroupResultButton}
         </CardHeader> 
         <Divider/>
         <CardBody>
@@ -123,11 +161,13 @@ export default function Group({group, g_idx, studyId}) {
           <div key={g_idx} className="flex gap-2 flex-wrap">
             { subjects.map((subject, s_idx) => { 
               return ( 
-                <Link key={s_idx} href={`http://localhost:3003/subjects/` + subject["id"]}> 
-                  <div className="text-md m-2">
-                    { subject["name"] }
-                  </div> 
-                </Link>
+                <Tooltip key={s_idx} content="Voir le sujet dans la base de données">
+                  <Link href={`http://localhost:3003/subjects/` + subject["id"]}> 
+                    <div className="text-md m-2">
+                      { subject["name"] }
+                    </div> 
+                  </Link>
+                </Tooltip>
               ) 
               }) 
             }

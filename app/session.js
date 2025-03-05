@@ -5,6 +5,8 @@ import {Button, ButtonGroup} from "@nextui-org/react";
 import { mutate } from "swr";
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import { convertResultsToCSV, downloadCSV } from "@/js_to_csv";
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 export default function Session({session, s_idx, g_idx, group, subjects, studyId}) {
 
@@ -67,21 +69,24 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
       };
 
       return (
-        <button 
-          onClick={async () => {
-            let res = await deleteSubject(subject["id"]);
-            if(res == "ok"){
-              handleClickVariant('info','Sujet supprimé !');
-            }
-            else{
-              handleClickVariant('error','Erreur lors de la suppression');
-            }
-          }}>
-            x 
-        </button>
+        <Tippy content="Supprimer le sujet"
+                placement="top">
+          <button 
+            onClick={async () => {
+              let res = await deleteSubject(subject["id"]);
+              if(res == "ok"){
+                handleClickVariant('info','Sujet supprimé !');
+              }
+              else{
+                handleClickVariant('error','Erreur lors de la suppression');
+              }
+            }}>
+              x 
+          </button>
+        </Tippy>
       )
     }
-
+    // console.log(session);
 
     return ( 
 
@@ -89,14 +94,12 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
         <Card>
           <CardHeader className="flex gap-10 justify-between">
             <h3 className="text-sm font-light"> {subject["name"]} </h3>
-            {/* <Button 
-              className="corner"
-              onClick={() => deleteSubject(subject["id"])}>
-                x 
-            </Button> */}
             
             <DeleteSubjectButton/>
-            <button onClick={() => downloadCSV(subject, s_idx)}>csv</button>
+            <Tippy content="Télécharger les résultats de ce sujet"
+                  placement="top">
+              <button onClick={() => downloadCSV(subject, session)}>csv</button>
+            </Tippy>
           </CardHeader>
           
 
