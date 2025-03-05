@@ -20,10 +20,67 @@ export default function Home() {
   const fileRef = useRef(null)
   const fetchResponseRef = useRef(null)
 
+  const showAlert = () => {
+    alert("Cette action est irréversible. Voulez-vous vraiment continuer ?");
+  };
+
   const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
+
+  async function deleteStudy(studyId) {
+    let studySubjects = await fetch(`http://localhost:3003/subjects/?studyId=${studyId}`)
+      .then(response => response.json())
+      .then(data => data) 
+      .catch((error) => {
+        console.error('Error:', error);
+        return error;
+      });
+
+    console.log(studySubjects)
+
+    // delet study subjects
+    await Promise.all(
+      studySubjects.map(subject => {
+        fetch(`http://localhost:3003/subjects/${subject.id}`, {
+          method: 'DELETE',
+        })
+          .then(response => response.json())
+          .then(data => { 
+            console.log("Deleted subject", subject.name)
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            return error;
+          });
+      })
+    );
+
+    console.log("sujets supprimés")
+
+    // delete study
+    await fetch(`http://localhost:3003/studies/${studyId}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => { 
+        console.log("Deleted study", data)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        return error;
+      });
+
+    console.log("étude supprimée")
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    mutate(`http://localhost:3003/subjects/?studyId=${studyId}`);
+    mutate("http://localhost:3003/studies/");
+
+    return "ok"
+  }
+
   
 
   async function importStudy() {
@@ -141,6 +198,13 @@ export default function Home() {
               >
               Accéder à l'étude
             </button>
+            <button 
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={showAlert}
+            >
+              Supprimer
+            </button>
+            {/* <button onClick={() => deleteStudy(study["id"])}>Supprimer l'étude</button> */}
             </Card>
           </div>
           )
