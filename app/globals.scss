@@ -6,7 +6,33 @@ html {
   font-family: var(--font-inter);
 }
 :root {
+  --main-background-color: #e8e8e8;
+  --experiment-background-color: #fbfbfb;
+  --danger-color:  #ef5245;
+  --button-color:  #00004c;
+  --disabled-button-color: #73737e;
+  --success-color: #65A30D;
 
+
+  --dark-blue: #000034;
+  --title-color: white;
+  --light-blue: #eaeffe;
+  --very-light-blue: #f4f7fe;
+  --text-on-light-blue: black;
+  --white: white;
+  --secondary-white: white;
+  --editable-text: #6c757d;
+  --top-gradient-1: #0f0f5e;
+  --top-gradient-2: #080835;
+  --top-gradient-1-step: 50%;
+  --top-gradient-2-step: 100%;
+
+
+  --survey-main-color: #3c4f6d;
+
+  --progress-init: #9eb5cd75;
+  --progress-blue: #6672fb;
+  --progress-orange: #f8b849;
 }
 
 .file-upload {
@@ -32,6 +58,64 @@ html {
   right: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+.white-button {
+  background-color: var(--white);
+  color: var(--dark-blue);
+
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  // font-size: var(--font-size-small);
+
+  text-align: center;
+  border-radius: 20px;
+  //padding: 1px 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  // padding: 1px 2px;
+ 
+  &:hover{
+      background-color: var(--dark-blue);
+      transition-duration: 0.5s;
+      color: var(--white);
+  }
+}
+
+.study-card {
+  width: 17em;
+  border-radius: 5px;
+  height: auto;
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+
+  &-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    // justify-content: space-between;
+    // align-items: center;
+    
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &-body {
+    font-weight: bold;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    color: var(--dark-blue);
+    
+  }
+  
+  &-footer {
+    display: flex;
+    justify-self: center;
+  }
 }
 
 /* 

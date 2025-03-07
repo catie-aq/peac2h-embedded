@@ -5,12 +5,14 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import useSWR from 'swr'
 import { useSWRConfig } from "swr"
-import {Card, Input, Button, select} from "@nextui-org/react";
+import {Card, Input, Button, select, CardHeader} from "@nextui-org/react";
 import Group from './group'
 import { useRouter } from 'next/navigation'
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
+import { Dialog, DialogContent } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -21,6 +23,7 @@ export default function Home() {
   const { mutate } = useSWRConfig()
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedName, setSelectedName] = useState("");
+  const [open, setOpen] = useState(false);
 
 
   const handleFileChange = (event) => {
@@ -160,10 +163,13 @@ export default function Home() {
 
     return (
       <Button 
-        className='max-w-[20em] m-4'
+        className='white-button mt-4'
         justify="center"  
         onClick={async () => {
           let res = await importStudy();
+          setOpen(false);
+          setSelectedFile(null);
+          setSelectedName("");
           if (res === "ok") {
             // Succès
             handleClickVariant('success', 'Étude ajoutée !');
@@ -181,10 +187,35 @@ export default function Home() {
     )
   }
 
+  const handleClose = () => {
+    setOpen(false);
+  }
 
-  
+
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <Dialog 
+        maxWidth={"md"}
+        open={open}
+        onClose={handleClose}>
+        <DialogContent className="w-[40em] mb-8 mt-4">
+          <div className="file-upload m-4">
+            {/* <img src={uploadImg} alt="upload" /> */}
+            <h3> {selectedName || "Cliquez ici pour charger une étude"}</h3>
+            <p>Format : .json</p>
+            <input 
+              type="file" 
+              justify="center" 
+              accept='.json'
+              onChange={handleFileChange}/>
+          </div>
+          
+          <div className="flex gap-4 justify-center">
+            <ImportStudyButton/>
+          </div>        
+        </DialogContent>
+      </Dialog>
+      
     {/* <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm"> */}
       <div className="flex flex-col items-center mt-8">
@@ -194,27 +225,42 @@ export default function Home() {
         <Image src="/peac2h_deco.jpg" width="500" height="400" alt="Peac²h logo" style={{display: "inline"}} priority/> 
         {/* <span className='ml-4'> embarquée  </span> */}
       
-    
+      <Button className='white-button mt-8' onClick={() => setOpen(true)}>
+        Ouvrir la boîte de dialogue
+      </Button>
       </div>
 
-      <div direction="row" className="flex gap-4 justify-start ml-10 mt-8">
+      
+
+      <div direction="row" className="flex flex-wrap gap-4 justify-start ml-10 mt-8">
 
       { data.map((study, s_idx) => {
         return (
           <div key={s_idx}>
-            <Card className="max-w-[25em] mb-8 mt-4">
-              <div className='flex justify-between'>
-                <h2 className='text-2xl m-4'> Étude: { study["name"] }</h2>
-                <Tippy content="Supprimer l'étude">
-                  <button onClick={() => deleteStudy(study["id"])} className='flex align-start m-4'>x</button>
-                </Tippy>
+            <Card className="study-card mb-8 mt-4">
+              <div className="study-card-header">
+                <span></span>
+                <h3 className="flex justify-center"> Étude {study["id"]} </h3>
+                
+                <button onClick={() => deleteStudy(study["id"])} 
+                        className='flex justify-end mr-4'>
+                  <Tippy content="Supprimer l'étude">
+                    <CloseIcon />
+                  </Tippy>
+                </button>
+                
               </div>
-            <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => router.push('/study?id=' + study["id"])}
-              >
-              Accéder à l'étude
-            </button>
+              <h2 className='study-card-body'> Étude: { study["name"] }</h2>
+
+              <div className='study-card-footer'>
+                <Button 
+                  className="white-button"
+                  onClick={() => router.push('/study?id=' + study["id"])}
+                  >
+                  Accéder à l'étude
+                </Button>
+              </div>
+            
             {/* <button 
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={showAlert}
@@ -229,32 +275,6 @@ export default function Home() {
       )}
 
       </div>
-
-      <div className='flex justify-center'>
-      <Card className="w-[40em] mb-8 mt-4">
-        <div className="file-upload m-4">
-          {/* <img src={uploadImg} alt="upload" /> */}
-          <h3> {selectedName || "Cliquez ici pour charger une étude"}</h3>
-          <p>Format : .json</p>
-          <input 
-            type="file" 
-            justify="center" 
-            accept='.json'
-            onChange={handleFileChange}/>
-        </div>
-        
-        <div className="flex gap-4 justify-center">
-          <ImportStudyButton/>
-        </div>
-        {/* <Button
-          onClick={() => importStudy()}
-          justify="center"
-          >
-          Importer une étude
-        </Button> */}
-        
-        </Card>
-        </div>
       {/* </div>
     </main> */}
     </SnackbarProvider>
