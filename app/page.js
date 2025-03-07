@@ -5,10 +5,12 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import useSWR from 'swr'
 import { useSWRConfig } from "swr"
-import {Card, Input, Button} from "@nextui-org/react";
+import {Card, Input, Button, select} from "@nextui-org/react";
 import Group from './group'
 import { useRouter } from 'next/navigation'
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -17,8 +19,16 @@ export default function Home() {
 
   const router = useRouter()
   const { mutate } = useSWRConfig()
-  const fileRef = useRef(null)
-  const fetchResponseRef = useRef(null)
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedName, setSelectedName] = useState("");
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setSelectedName(file.name);
+    // Additional validation logic
+  };
 
   const showAlert = () => {
     alert("Cette action est irréversible. Voulez-vous vraiment continuer ?");
@@ -85,7 +95,7 @@ export default function Home() {
 
   async function importStudy() {
     // Récupérer le fichier
-    let file = fileRef.current?.files[0];
+    let file = selectedFile;
     if (!file) {
       return "no-file"; // ou throw new Error("Pas de fichier")
     }
@@ -150,6 +160,7 @@ export default function Home() {
 
     return (
       <Button 
+        className='max-w-[20em] m-4'
         justify="center"  
         onClick={async () => {
           let res = await importStudy();
@@ -165,7 +176,7 @@ export default function Home() {
           }
         }} 
       >
-        Importer une étude
+        Importer l'étude
       </Button> 
     )
   }
@@ -174,37 +185,43 @@ export default function Home() {
   
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-    <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+    {/* <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm"> */}
+      <div className="flex flex-col items-center mt-8">
 
-      <h1 className="text-4xl font-bold">PEAC²H Embarqué</h1>
-      <p className="text-2xl" style={{color: "#f8b242"}}> 
+      <h1 className="text-4xl font-bold mb-4">PEAC²H D&CO</h1>
       
-        <Image src="/PEAC2H.png" width="150" height="100" alt="Peac²h logo" style={{display: "inline"}} priority/> 
-        <span className='ml-4'> embarquée  </span>
+        <Image src="/peac2h_deco.jpg" width="500" height="400" alt="Peac²h logo" style={{display: "inline"}} priority/> 
+        {/* <span className='ml-4'> embarquée  </span> */}
       
-         </p>
+    
+      </div>
 
-      <div direction="row" className="flex gap-4">
+      <div direction="row" className="flex gap-4 justify-start ml-10 mt-8">
 
       { data.map((study, s_idx) => {
         return (
           <div key={s_idx}>
-            <Card className="max-w-[20em] mb-8 mt-4">
-            <h2 className='text-2xl m-4'> Étude: { study["name"] }</h2>
+            <Card className="max-w-[25em] mb-8 mt-4">
+              <div className='flex justify-between'>
+                <h2 className='text-2xl m-4'> Étude: { study["name"] }</h2>
+                <Tippy content="Supprimer l'étude">
+                  <button onClick={() => deleteStudy(study["id"])} className='flex align-start m-4'>x</button>
+                </Tippy>
+              </div>
             <button 
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => router.push('/study?id=' + study["id"])}
               >
               Accéder à l'étude
             </button>
-            <button 
+            {/* <button 
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={showAlert}
             >
               Supprimer
-            </button>
-            {/* <button onClick={() => deleteStudy(study["id"])}>Supprimer l'étude</button> */}
+            </button> */}
+            
             </Card>
           </div>
           )
@@ -213,11 +230,22 @@ export default function Home() {
 
       </div>
 
-      <Card className="max-w-[45em] mb-8 mt-4">
-        <Input type="file" ref={fileRef} justify="center"/>
+      <div className='flex justify-center'>
+      <Card className="w-[40em] mb-8 mt-4">
+        <div className="file-upload m-4">
+          {/* <img src={uploadImg} alt="upload" /> */}
+          <h3> {selectedName || "Cliquez ici pour charger une étude"}</h3>
+          <p>Format : .json</p>
+          <input 
+            type="file" 
+            justify="center" 
+            accept='.json'
+            onChange={handleFileChange}/>
+        </div>
         
+        <div className="flex gap-4 justify-center">
           <ImportStudyButton/>
-      
+        </div>
         {/* <Button
           onClick={() => importStudy()}
           justify="center"
@@ -226,55 +254,10 @@ export default function Home() {
         </Button> */}
         
         </Card>
-      </div>
-    </main>
+        </div>
+      {/* </div>
+    </main> */}
     </SnackbarProvider>
   )
 }
-
-// "use client";
-
-// import { useState } from 'react';
-
-// export default function UploadJson() {
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files?.[0];
-  //   if (!file) return;
-
-  //   // Vérifier qu’il s’agit bien d’un fichier JSON (optionnel)
-  //   if (file.type !== 'application/json') {
-  //     console.error("Veuillez sélectionner un fichier JSON.");
-  //     return;
-  //   }
-
-  //   // Créer un FileReader pour lire le contenu du fichier
-  //   const reader = new FileReader();
-  //   reader.onload = (e) => {
-  //     // Log le texte brut du fichier
-  //     console.log(e.target.result);
-
-  //     // Si vous souhaitez parser le JSON, vous pouvez faire :
-  //     // const parsedData = JSON.parse(e.target.result);
-  //     // console.log(parsedData);
-  //   };
-  //   reader.onerror = () => {
-  //     console.error('Erreur lors de la lecture du fichier.');
-  //   };
-
-  //   // Lire le fichier en tant que texte (UTF-8)
-  //   reader.readAsText(file);
-  // };
-
-//   return (
-//     <div>
-//       <h1>Upload d’un fichier JSON</h1>
-//       <input
-//         type="file"
-//         accept="application/json"
-//         onChange={handleFileChange}
-//       />
-//     </div>
-//   );
-// }
-
 
