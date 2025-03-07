@@ -182,7 +182,7 @@ export default function Home() {
           }
         }} 
       >
-        Importer l'étude
+        Valider
       </Button> 
     )
   }
@@ -218,21 +218,24 @@ export default function Home() {
       
     {/* <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm"> */}
-      <div className="flex flex-col items-center mt-8">
+      <div className='flex justify-start ml-10 mt-8'>
+        <Image src='/PEAC2H.png' width="200" height="200" alt="Peac²h logo" style={{display: "inline"}} priority/>
+      </div>
+      <div className="flex flex-col items-center">
 
-      <h1 className="text-4xl font-bold mb-4">PEAC²H D&CO</h1>
-      
-        <Image src="/peac2h_deco.jpg" width="500" height="400" alt="Peac²h logo" style={{display: "inline"}} priority/> 
-        {/* <span className='ml-4'> embarquée  </span> */}
-      
-      <Button className='white-button mt-8' onClick={() => setOpen(true)}>
-        Ouvrir la boîte de dialogue
-      </Button>
+        {/* <h1 className="text-4xl font-bold mb-4">PEAC²H D&CO</h1> */}
+        
+          {/* <Image src="/peac2h_deco.jpg" width="500" height="400" alt="Peac²h logo" style={{display: "inline"}} priority/>  */}
+          {/* <span className='ml-4'> embarquée  </span> */}
+        
+        <Button className='white-button white-button-big' onClick={() => setOpen(true)}>
+          Importer une étude
+        </Button>
       </div>
 
       
 
-      <div direction="row" className="flex flex-wrap gap-4 justify-start ml-10 mt-8">
+      <div direction="row" className="study-list">
 
       { data.map((study, s_idx) => {
         return (
@@ -251,7 +254,7 @@ export default function Home() {
                   className="flex justify-end mr-4"
                 >
                   <Tippy content="Supprimer l'étude">
-                    <CloseIcon />
+                    <CloseIcon color='error'/>
                   </Tippy>
                 </button>
 
