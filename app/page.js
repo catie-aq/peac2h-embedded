@@ -242,12 +242,19 @@ export default function Home() {
                 <span></span>
                 <h3 className="flex justify-center"> Étude {study["id"]} </h3>
                 
-                <button onClick={() => deleteStudy(study["id"])} 
-                        className='flex justify-end mr-4'>
+                <button
+                  onClick={() => {
+                    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette étude ?")) {
+                      deleteStudy(study["id"]);
+                    }
+                  }}
+                  className="flex justify-end mr-4"
+                >
                   <Tippy content="Supprimer l'étude">
                     <CloseIcon />
                   </Tippy>
                 </button>
+
                 
               </div>
               <h2 className='study-card-body'> Étude: { study["name"] }</h2>

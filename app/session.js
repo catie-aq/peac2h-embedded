@@ -73,12 +73,14 @@ export default function Session({session, s_idx, g_idx, group, subjects, studyId
                 placement="top">
           <button 
             onClick={async () => {
-              let res = await deleteSubject(subject["id"]);
-              if(res == "ok"){
-                handleClickVariant('info','Sujet supprimé !');
-              }
-              else{
-                handleClickVariant('error','Erreur lors de la suppression');
+              if(window.confirm("La suppression du sujet entraîne la suppresion de ses données. Voulez-vous vraiment supprimer ce sujet ?")){
+                let res = await deleteSubject(subject["id"]);
+                if(res == "ok"){
+                  handleClickVariant('info','Sujet supprimé !');
+                }
+                else{
+                  handleClickVariant('error','Erreur lors de la suppression');
+                }
               }
             }}>
               x 
