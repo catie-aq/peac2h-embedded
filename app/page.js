@@ -216,77 +216,69 @@ export default function Home() {
         </DialogContent>
       </Dialog>
       
-    {/* <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm"> */}
-      <div className='flex justify-start ml-10 mt-8'>
+      <div className='flex justify-start mt-8 ml-8'>
         <Image src='/PEAC2H.png' width="200" height="200" alt="Peac²h logo" style={{display: "inline"}} priority/>
       </div>
-      <div className="flex flex-col items-center">
-
-        {/* <h1 className="text-4xl font-bold mb-4">PEAC²H D&CO</h1> */}
-        
-          {/* <Image src="/peac2h_deco.jpg" width="500" height="400" alt="Peac²h logo" style={{display: "inline"}} priority/>  */}
-          {/* <span className='ml-4'> embarquée  </span> */}
-        
-        <Button className='white-button white-button-big' onClick={() => setOpen(true)}>
-          Importer une étude
-        </Button>
-      </div>
-
-      
-
-      <div direction="row" className="study-list">
-
-      { data.map((study, s_idx) => {
-        return (
-          <div key={s_idx}>
-            <Card className="study-card mb-8 mt-4">
-              <div className="study-card-header">
-                <span></span>
-                <h3 className="flex justify-center"> Étude {study["id"]} </h3>
-                
-                <button
-                  onClick={() => {
-                    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette étude ?")) {
-                      deleteStudy(study["id"]);
-                    }
-                  }}
-                  className="flex justify-end mr-4"
-                >
-                  <Tippy content="Supprimer l'étude">
-                    <CloseIcon color='error'/>
-                  </Tippy>
-                </button>
-
-                
-              </div>
-              <h2 className='study-card-body'> Étude: { study["name"] }</h2>
-
-              <div className='study-card-footer'>
-                <Button 
-                  className="white-button"
-                  onClick={() => router.push('/study?id=' + study["id"])}
-                  >
-                  Accéder à l'étude
-                </Button>
-              </div>
-            
-            {/* <button 
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-              onClick={showAlert}
-            >
-              Supprimer
-            </button> */}
-            
-            </Card>
+      <main className="font-sans flex min-h-screen flex-col items-center justify-between">
+        <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
+          <div className="flex justify-center">
+            <Button className='white-button white-button-big' onClick={() => setOpen(true)}>
+              Importer une étude
+            </Button>
           </div>
-          )
-        }
-      )}
 
-      </div>
-      {/* </div>
-    </main> */}
+          <div direction="row" className="study-list">
+
+            { data.map((study, s_idx) => {
+              return (
+                <div key={s_idx}>
+                  <Card className="study-card mb-8 mt-4">
+                    <div className="study-card-header">
+                      <span></span>
+                      <h3 className="flex justify-center"> Étude {study["id"]} </h3>
+                      
+                      <button
+                        onClick={() => {
+                          if (window.confirm("Êtes-vous sûr de vouloir supprimer cette étude ?")) {
+                            deleteStudy(study["id"]);
+                          }
+                        }}
+                        className="flex justify-end mr-4"
+                      >
+                        <Tippy content="Supprimer l'étude">
+                          <CloseIcon color='error'/>
+                        </Tippy>
+                      </button>
+
+                      
+                    </div>
+                    <h2 className='study-card-body'> Étude: { study["name"] }</h2>
+
+                    <div className='study-card-footer'>
+                      <Button 
+                        className="white-button"
+                        onClick={() => router.push('/study?id=' + study["id"])}
+                        >
+                        Accéder à l'étude
+                      </Button>
+                    </div>
+                  
+                  {/* <button 
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={showAlert}
+                  >
+                    Supprimer
+                  </button> */}
+                  
+                  </Card>
+                </div>
+                )
+              }
+            )}
+
+          </div>
+        </div>
+      </main>
     </SnackbarProvider>
   )
 }

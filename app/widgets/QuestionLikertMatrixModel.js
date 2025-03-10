@@ -100,6 +100,7 @@ export class SurveyQuestionLikertMatrix extends SurveyQuestionElementBase {
       <div className="likert-matrix grid-cols-4 grid">
         {Array.isArray(question.rows) &&
           question.rows.map((row, rowIndex) => {
+            // TODO: handle the case where the default is "itemX" instead of {text: "itemX", value: "itemX", Texte2: "itemX"}
             if(row.Texte2 === undefined){
               row.Texte2 = "undefined"
             }

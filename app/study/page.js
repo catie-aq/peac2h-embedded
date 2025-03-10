@@ -33,31 +33,48 @@ export default function Home() {
   
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-    <main className="font-sans flex min-h-screen flex-col items-center justify-between p-12">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+      <Image className="flex justify-start mt-8 ml-8" src="/PEAC2H.png" width="200" height="200" alt="Peac²h logo" style={{display: "inline"}}/> 
+      {/* TODO: put this in a css class ? */}
+      <main className="font-sans flex min-h-screen flex-col items-center justify-between p-8">
+        <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
+          <div className="flex justify-between gap-12">
+            <Button className='white-button' onClick={() => router.push('/')}>Accueil</Button>
+            <h1 className="text-4xl bold-text">{ name }</h1>
+            <Button className='white-button'>etat de l'étude</Button>
+          </div>
 
-      <h1 className="text-4xl font-bold">Étude: { name }</h1>
-      <p className="text-2xl" style={{color: "#f8b242"}}> 
-      
-        <Image src="/PEAC2H.png" width="150" height="100" alt="Peac²h logo" style={{display: "inline"}}/> 
-        <span className='ml-4'> embarquée  </span>
-      
-         </p>
-
-      <Button onClick={() => router.push('/')}>retour</Button>
-      <h2 className='text-2xl mt-8 mb-4'> Groupes et sessions</h2>
+          <h2 className='text-2xl mt-8 mb-4'> Groupes et sessions</h2>
   
-        { 
-          groups.map((group, g_idx) => { 
-            return (   
-              <div key={g_idx}>
-                <Group group={group} g_idx={g_idx} studyId={studyId}/>
-              </div>
-            ) } ) 
-        }
+          { 
+            groups.map((group, g_idx) => { 
+              if(g_idx === 0){
+                return (
+                  <div key={g_idx}>
+                    <Group group={group} g_idx={g_idx} studyId={studyId} showGroup={true}/>
+                  </div>
+                )
+              }else {
+                return (   
+                  <div key={g_idx}>
+                    <Group group={group} g_idx={g_idx} studyId={studyId} showGroup={false}/>
+                  </div>
+                ) }
+              })
+              // return (   
+              //   <div key={g_idx}>
+              //     <Group group={group} g_idx={g_idx} studyId={studyId}/>
+              //   </div>
+              // ) } ) 
+          }
+        </div>
+
+        
+      </main>
+        
+      
      
-      </div>
-    </main>
+      {/* </div>
+    </main> */}
     </SnackbarProvider>
   )
 }

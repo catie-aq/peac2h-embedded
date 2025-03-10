@@ -74,7 +74,7 @@ html {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
 
   // padding: 1px 2px;
  
@@ -97,8 +97,6 @@ html {
   justify-content: start;
   gap: 1rem;
   margin-top: 1rem;
-  margin-left: 10rem;
-  margin-right: 10rem;
 }
 
 .study-card {
@@ -132,6 +130,55 @@ html {
     display: flex;
     justify-self: center;
   }
+}
+
+.bold-text {
+  font-weight: bold;
+  color: var(--dark-blue);
+}
+
+.session-management {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 1fr;
+  gap: 1rem;
+  align-items: center;
+
+}
+
+.subject-progress-bar{
+  height: 0.6em;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 1em;
+  cursor: default;
+
+  // Warning new gray color defined here 
+  background-color: var(--progress-init);
+  // background-color: #9eb5cd75;
+
+  progress[value]{
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 0.6em;
+      border-radius: 1em;
+  }
+  progress[value]::-webkit-progress-bar {
+      background-color: rgba(234, 239, 254, 0);
+      border-radius: 20px;
+      border-radius: 1em;
+      height: 0.6em;
+  }
+  progress[value]::-webkit-progress-value {
+      background: var(--progress-orange);
+      border-radius: 30px;
+      border-radius: 1em;
+      height: 0.6em;
+  }
+} 
+
+.progress-bar-complete progress[value]::-webkit-progress-value {
+  background: var(--success-color, #4caf50);
 }
 
 /* 

@@ -45,6 +45,11 @@ export default function Home() {
 
   const survey = new Model(surveyJson);
 
+  // open the survey to the current page
+  if(dataUser.hasOwnProperty("result-S" + session)){
+    survey.currentPageNo = dataUser["result-S" + session].pageNo;
+  }
+
   survey.applyTheme(theme);
 
   survey.data = dataUser["result-S" + session]
