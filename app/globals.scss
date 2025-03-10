@@ -36,11 +36,15 @@ html {
 }
 
 .file-upload {
-  text-align: center;
+  // text-align: center;
   border: 3px dashed rgb(210, 227, 244);
   padding: 1.5rem;
   position: relative;
   cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  align-items: center;
 }
 .file-upload p {
   font-size: 0.87rem;
@@ -133,6 +137,10 @@ html {
 .bold-text {
   font-weight: bold;
   color: var(--dark-blue);
+}
+
+.light-text {
+  font-weight: 200 !important;
 }
 
 .session-management {

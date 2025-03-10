@@ -214,7 +214,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
               <span></span>
               <div className="flex flex-col items-center">
                 <h3 className="bold-text">{group["name"]}</h3>
-                <h3 className="flex justify-end mr-4"> Sujet {subject["name"]}  </h3>
+                <h3 className="light-text"> Sujet {subject["name"]}</h3>
               </div>
               
             </div>
@@ -278,7 +278,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
             }
           </div>
 
-          <div className="flex gap-4 items-center mt-2 ml-4 mb-4"> {/* less collapse lag when margin are here... */}
+          <div className="flex gap-4 items-center mt-4 ml-4 mb-4"> {/* less collapse lag when margin are here... */}
                     
             <Input
               label="ID participant"

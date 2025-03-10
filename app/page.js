@@ -13,6 +13,7 @@ import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
 import { Dialog, DialogContent } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -199,18 +200,30 @@ export default function Home() {
         open={open}
         onClose={handleClose}>
         <DialogContent className="w-[40em] mb-8 mt-4">
-          <div className="file-upload m-4">
+          <div className="file-upload">
             {/* <img src={uploadImg} alt="upload" /> */}
-            <h3> {selectedName || "Cliquez ici pour charger une étude"}</h3>
-            <p>Format : .json</p>
-            <input 
-              type="file" 
-              justify="center" 
-              accept='.json'
-              onChange={handleFileChange}/>
+            
+            <div className='flex flex-col justify-center items-center'>
+              <CloudUploadIcon fontSize='large'/>
+              <span>Glissez un fichier</span>
+            </div>
+
+            <p className='flex justify-center'>Ou</p>
+        
+            <div className='flex flex-col justify-center items-center'>
+              <h3>Trouver un fichier</h3>
+              <p>Format : .json</p>
+              <input 
+                type="file" 
+                justify="center" 
+                accept='.json'
+                onChange={handleFileChange}/>
+            </div>
           </div>
+
+          <h3 className='flex justify-center mt-4'> {selectedName || "Aucun fichier sélectionné"}</h3>
           
-          <div className="flex gap-4 justify-center">
+          <div className="flex mt-4 justify-center">
             <ImportStudyButton/>
           </div>        
         </DialogContent>
@@ -219,7 +232,7 @@ export default function Home() {
       <div className='flex justify-start mt-8 ml-8'>
         <Image src='/PEAC2H.png' width="200" height="200" alt="Peac²h logo" style={{display: "inline"}} priority/>
       </div>
-      <main className="font-sans flex min-h-screen flex-col items-center justify-between">
+      <main className="font-sans flex flex-col items-center justify-between">
         <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
           <div className="flex justify-center">
             <Button className='white-button white-button-big' onClick={() => setOpen(true)}>

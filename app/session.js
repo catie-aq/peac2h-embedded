@@ -84,7 +84,7 @@ export default function Session({session, s_idx, g_idx, group, subject, studyId}
   return (
 
     <div className="session-management">
-      <h3>Session {s_idx}</h3>
+      <h3 className="light-text">Session {s_idx}</h3>
       <h3 className="bold-text">{session["name"]}</h3>
       <Tippy content={tippyContent} appendTo={document.body} placement="top">
         {progressBar}
