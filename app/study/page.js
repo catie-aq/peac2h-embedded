@@ -60,21 +60,11 @@ export default function Home() {
                   </div>
                 ) }
               })
-              // return (   
-              //   <div key={g_idx}>
-              //     <Group group={group} g_idx={g_idx} studyId={studyId}/>
-              //   </div>
-              // ) } ) 
           }
         </div>
 
         
       </main>
-        
-      
-     
-      {/* </div>
-    </main> */}
     </SnackbarProvider>
   )
 }

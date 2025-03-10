@@ -94,7 +94,7 @@ html {
 .study-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -109,8 +109,6 @@ html {
   &-header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    // justify-content: space-between;
-    // align-items: center;
     
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -178,7 +176,7 @@ html {
 } 
 
 .progress-bar-complete progress[value]::-webkit-progress-value {
-  background: var(--success-color, #4caf50);
+  background: var(--success-color);
 }
 
 /* 
