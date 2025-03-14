@@ -21,7 +21,7 @@ export default function Home() {
 
   let studyId = parseInt(params.get("id"));
 
-  const { data, error, isLoading }= useSWR('http://localhost:3003/studies/' + studyId, fetcher)
+  const { data, error, isLoading }= useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/studies/' + studyId, fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>

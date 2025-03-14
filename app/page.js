@@ -14,9 +14,9 @@ import 'tippy.js/dist/tippy.css';
 import { Dialog, DialogContent } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { importStudy, deleteStudy } from '@/helpers/study_management';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
-
 
 export default function Home() {
 
@@ -34,123 +34,46 @@ export default function Home() {
     // Additional validation logic
   };
 
-  const showAlert = () => {
-    alert("Cette action est irréversible. Voulez-vous vraiment continuer ?");
-  };
+  const handleClose = () => {
+    setOpen(false);
+  }
 
-  const { data, error, isLoading }= useSWR('http://localhost:3003/studies/', fetcher)
+  const { data, error, isLoading }= useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/studies/', fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
 
-  async function deleteStudy(studyId) {
-    let studySubjects = await fetch(`http://localhost:3003/subjects/?studyId=${studyId}`)
-      .then(response => response.json())
-      .then(data => data) 
-      .catch((error) => {
-        console.error('Error:', error);
-        return error;
-      });
+  function DeleteStudyButton({id}) {
+    const { enqueueSnackbar } = useSnackbar();
 
-    console.log(studySubjects)
+    function handleClickVariant(variant, message){
+      // variant could be success, error, warning, info, or default
+      enqueueSnackbar(message, { variant });
+    };
 
-    // delet study subjects
-    await Promise.all(
-      studySubjects.map(subject => {
-        fetch(`http://localhost:3003/subjects/${subject.id}`, {
-          method: 'DELETE',
-        })
-          .then(response => response.json())
-          .then(data => { 
-            console.log("Deleted subject", subject.name)
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-            return error;
-          });
-      })
-    );
-
-    console.log("sujets supprimés")
-
-    // delete study
-    await fetch(`http://localhost:3003/studies/${studyId}`, {
-      method: 'DELETE',
-    })
-      .then(response => response.json())
-      .then(data => { 
-        console.log("Deleted study", data)
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        return error;
-      });
-
-    console.log("étude supprimée")
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    mutate(`http://localhost:3003/subjects/?studyId=${studyId}`);
-    mutate("http://localhost:3003/studies/");
-
-    return "ok"
-  }
-
-  
-
-  async function importStudy() {
-    // Récupérer le fichier
-    let file = selectedFile;
-    if (!file) {
-      return "no-file"; // ou throw new Error("Pas de fichier")
-    }
-  
-    // On retourne une Promise
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = async (event) => {
-        try {
-          const textContent = event.target.result;
-          const parsedData = JSON.parse(textContent);
-  
-          // ... vos vérifs ...
-          const study_name = parsedData["name"];
-          const alreadyExists = data.some(study => study.name === study_name);
-  
-          if (alreadyExists) {
-            return resolve("exists"); // On “résout” la Promise avec un statut
+    return (
+      <>
+      <button
+        onClick={async () => {
+          if (window.confirm("Êtes-vous sûr de vouloir supprimer cette étude ?")) {
+            let res = await deleteStudy(id, mutate);
+            if (res === "ok") {
+              // Succès
+              handleClickVariant('info', 'Étude supprimée !');
+            } else {
+              // Erreur
+              handleClickVariant('error', 'Erreur lors de la suppression');
+            }
           }
-  
-          // On envoie la requête
-          const response = await fetch("http://localhost:3003/studies", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(parsedData, null, 2)
-          });
-  
-          if (!response.ok) {
-            throw new Error("Erreur HTTP: " + response.status);
-          }
-  
-          // On force la revalidation SWR (si besoin)
-          mutate("http://localhost:3003/studies/");
-  
-          // On résout la Promise avec un statut “ok”
-          resolve("ok");
-        } catch (error) {
-          // Si on a une erreur de parse ou de fetch
-          reject(error);
-        }
-      };
-  
-      // En cas d’erreur de lecture
-      reader.onerror = (err) => {
-        reject(err);
-      };
-  
-      // Lance la lecture du fichier
-      reader.readAsText(file);
-    });
+        }}
+        className="flex justify-end mr-4"
+      >
+        <Tippy content="Supprimer l'étude">
+          <CloseIcon color='error'/>
+        </Tippy>
+      </button>
+      </>
+    )
   }
   
 
@@ -167,7 +90,7 @@ export default function Home() {
         className='white-button mt-4'
         justify="center"  
         onClick={async () => {
-          let res = await importStudy();
+          let res = await importStudy(selectedFile, data, mutate);
           setOpen(false);
           setSelectedFile(null);
           setSelectedName("");
@@ -186,10 +109,6 @@ export default function Home() {
         Valider
       </Button> 
     )
-  }
-
-  const handleClose = () => {
-    setOpen(false);
   }
 
 
@@ -250,20 +169,8 @@ export default function Home() {
                       <span></span>
                       <h3 className="flex justify-center"> Étude {study["id"]} </h3>
                       
-                      <button
-                        onClick={() => {
-                          if (window.confirm("Êtes-vous sûr de vouloir supprimer cette étude ?")) {
-                            deleteStudy(study["id"]);
-                          }
-                        }}
-                        className="flex justify-end mr-4"
-                      >
-                        <Tippy content="Supprimer l'étude">
-                          <CloseIcon color='error'/>
-                        </Tippy>
-                      </button>
+                      <DeleteStudyButton id={study["id"]}/>
 
-                      
                     </div>
                     <h2 className='study-card-body'> Étude: { study["name"] }</h2>
 
@@ -275,13 +182,6 @@ export default function Home() {
                         Accéder à l'étude
                       </Button>
                     </div>
-                  
-                  {/* <button 
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                    onClick={showAlert}
-                  >
-                    Supprimer
-                  </button> */}
                   
                   </Card>
                 </div>

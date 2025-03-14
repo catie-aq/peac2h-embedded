@@ -4,7 +4,7 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nex
 import {Button, ButtonGroup} from "@nextui-org/react";
 import { mutate } from "swr";
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-import { convertResultsToCSV, downloadCSV } from "@/js_to_csv";
+import { convertResultsToCSV, downloadCSV } from "@/helpers/js_to_csv";
 import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
 import { ComputePagesNumber } from "@/progress_bar";

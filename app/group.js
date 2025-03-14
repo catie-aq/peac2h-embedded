@@ -5,7 +5,7 @@ import Session from "./session";
 import useSWR from 'swr'
 import { useSWRConfig } from "swr"
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
-import { convertResultsToCSVGroup, downloadCSVGroup } from "@/js_to_csv";
+import { convertResultsToCSVGroup, downloadCSVGroup } from "@/helpers/js_to_csv";
 import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
 import { useCollapse } from "react-collapsed";
@@ -13,6 +13,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { createSubject, deleteSubject } from "@/helpers/subject_management";
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
@@ -23,8 +24,8 @@ export default function Group({group, g_idx, studyId, showGroup}) {
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   
-  const { data, error, isLoading }= useSWR('http://localhost:3003/subjects/?group=' + g_idx + '&studyId=' + studyId, fetcher)
-  const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading, mutate: mutateAllSubjects} = useSWR('http://localhost:3003/subjects/?studyId=' + studyId, fetcher);
+  const { data, error, isLoading }= useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/?group=' + g_idx + '&studyId=' + studyId, fetcher)
+  const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading, mutate: mutateAllSubjects} = useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/?studyId=' + studyId, fetcher);
 
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({
     defaultExpanded: showGroup,
@@ -39,48 +40,6 @@ export default function Group({group, g_idx, studyId, showGroup}) {
 
   let subjects = data;
 
-  
-  let createSubject = async function() {
-    const alreadyExists = allSubjects.some(subject => 
-      subject.name === userId &&
-      subject.studyId === studyId
-    );
-    
-    if (alreadyExists) {
-      return "Sujet déjà existant";
-    }
-
-    if (userId === "") {
-      return "Le nom du sujet ne peut pas être vide";
-    }
-
-    
-    fetch(`http://localhost:3003/subjects/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: userId, // name instead of id to avoid duplicate ids within multiple studies, maybe to reconsider
-        group: g_idx,
-        studyId: studyId
-      })
-    })
-      .then(response => response.json())
-      .then(data => { 
-        // console.log("Creation", data)
-
-        // Ask for revalidation
-        setuserId("");
-        mutateAllSubjects();
-        mutate(`http://localhost:3003/subjects/?group=` + g_idx + '&studyId=' + studyId)
-      })  
-      .catch(error => console.error(error));
-
-      return "ok";
-
-  }
-
   function CreateSubjectButton() {
     const { enqueueSnackbar } = useSnackbar();
   
@@ -92,7 +51,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     return (
       <Button className="white-button"
       onClick={async () => {
-        let res = await createSubject();
+        let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate, mutateAllSubjects);
         if(res == "ok"){
           handleClickVariant('success','Sujet créé !');
         }
@@ -141,23 +100,6 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     )
   }
 
-  async function deleteSubject(subjectId) {
-    fetch(`http://localhost:3003/subjects/${subjectId}`, {
-      method: 'DELETE',
-    })
-      .then(response => response.json())
-      .then(data => { 
-        console.log("Deleted", data)
-        mutate(`http://localhost:3003/subjects/?group=${g_idx}&studyId=${studyId}`)
-        mutate(`http://localhost:3003/subjects/?studyId=${studyId}`)
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        return error;
-      });
-      return "ok"
-  }
-
   function OpenModal(subject) {
     setOpen(true);
     setSelectedSubject(subject);
@@ -179,10 +121,10 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     
         return (
           <Button 
-            className="white-button"
+            className="white-button white-button-delete"
             onClick={async () => {
               if(window.confirm("La suppression du sujet entraîne la suppresion de ses données. Voulez-vous vraiment supprimer ce sujet ?")){
-                let res = await deleteSubject(subject["id"]);
+                let res = await deleteSubject(subject["id"], mutate, g_idx, studyId);
                 setOpen(false);
                 if(res == "ok"){
                   

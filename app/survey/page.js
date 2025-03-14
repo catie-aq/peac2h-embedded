@@ -29,15 +29,15 @@ export default function Home() {
   let subject = params.get("subject");
   let studyId = parseInt(params.get("studyId"));
   
-  const { data, error, isLoading }= useSWRImmutable('http://localhost:3003/studies/' + studyId, fetcher)
-  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWRImmutable('http://localhost:3003/subjects/'+ subject, fetcher)
+  const { data, error, isLoading }= useSWRImmutable(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/studies/' + studyId, fetcher)
+  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWRImmutable(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/'+ subject, fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
   if (errorUser) return <div>échec du chargement</div>
   if (isLoadingUser) return <div>chargement...</div>
 
-  // xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
+  // xhr.open("PATCH", process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/subjects/"+ subject);
 
   let group_data = data["groups"][group]["time_periods"]
   let session_data = group_data.find((time_period) => time_period["position"] == session);
@@ -58,7 +58,7 @@ export default function Home() {
     // Display the "Saving..." message (pass a string value to display a custom message)
     if(options.isNextPage){
       const xhr = new XMLHttpRequest();
-      xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
+      xhr.open("PATCH", process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/subjects/"+ subject);
       xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
 
       xhr.onload = xhr.onerror = function () {
@@ -85,7 +85,7 @@ export default function Home() {
     // Display the "Saving..." message (pass a string value to display a custom message)
     options.showSaveInProgress();
     const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
+    xhr.open("PATCH", process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/subjects/"+ subject);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
 
     xhr.onload = xhr.onerror = function () {

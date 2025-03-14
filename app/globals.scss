@@ -93,6 +93,14 @@ html {
     height: 3em;
     font-size: 1.5em;
   }
+
+  &-delete {
+    &:hover{
+      background-color: var(--danger-color);
+      transition-duration: 0.5s;
+      color: var(--white);
+    }
+  }
 }
 
 .study-list {

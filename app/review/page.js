@@ -31,11 +31,8 @@ export default function Home() {
   let subject = params.get("subject");
   let studyId = parseInt(params.get("studyId"));
 
-  // const { data: study, error: studyError, isLoading: loading1 }= useSWR('http://localhost:3003/studies/', fetcher)
-  // const { data: subjectData, error: subjectError, isLoading: loading2 }= useSWR('http://localhost:3003/subjects/' + subject, subjectFetcher)
-
-  const { data: study, error: studyError, isLoading: loading1 }= useSWRImmutable('http://localhost:3003/studies/' + studyId, fetcher)
-  const { data: subjectData, error: subjectError, isLoading: loading2 }= useSWRImmutable('http://localhost:3003/subjects/' + subject, subjectFetcher)
+  const { data: study, error: studyError, isLoading: loading1 }= useSWRImmutable(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/studies/' + studyId, fetcher)
+  const { data: subjectData, error: subjectError, isLoading: loading2 }= useSWRImmutable(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/' + subject, subjectFetcher)
 
   if (studyError || subjectError) return <div>échec du chargement</div>
 
