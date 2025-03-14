@@ -4,7 +4,7 @@ import { SurveyQuestionElementBase, ReactQuestionFactory } from "survey-react-ui
 
 const CUSTOM_TYPE = "likert";
 
-import "./likert.scss"
+import "./widgets.scss"
 
 export class QuestionLikertModel extends Question {
   getType() {
@@ -107,8 +107,12 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
 
   // Support the read-only and design modes
   get style() {
-    return this.question.getPropertyValue("readOnly")
-      || this.question.isDesignMode ? { pointerEvents: "none" } : undefined;
+    return this.question.survey.getPropertyValue("mode") === "display"
+      || this.question.isDesignMode ? { pointerEvents: "auto" } : undefined;
+  }
+
+  isDisabled() {
+    return this.question.survey.getPropertyValue("mode") === "display" || this.question.isDesignMode;
   }
 
   renderLikert(type) {
@@ -143,14 +147,17 @@ export class SurveyQuestionLikert extends SurveyQuestionElementBase {
     return ( 
       <>
 
-      <div className="flex flex-nowrap gap-3 likert"> 
+      <div className="flex flex-nowrap gap-8 likert justify-center"> 
         { 
-          rateDataValues.map( (rateDataValue) =>{
+          rateDataValues.map( (rateDataValue, idx) =>{
 
             let selection = this.question.value == rateDataValue.value ? "likert-item likert-item-selected" : "likert-item";
             return (
-              <div className={selection} 
-                   onClick={ () => {this.question.value = rateDataValue.value} }>  
+              <div className={selection} key={idx}
+                    onClick={ () => {
+                    if(this.isDisabled()) return;
+                    this.question.value = rateDataValue.value
+                    }}>  
                   
                   {rateDataValue.text}
                   

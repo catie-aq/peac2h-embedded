@@ -20,7 +20,7 @@ cd "${baseDir}"
 
 # Copy the folder and the file
 cp -r ../out ./public
-cp ../db.json ./db.json
+cp ../db_example.json ./db.json
 
 ## Get the dependencies
 yarn install
@@ -39,7 +39,7 @@ tar -czf "linux.tar.gz" peac2h-embedded-linux db.json public
 zip -r windows.zip peac2h-embedded-win.exe db.json public
 
 ## Cleanup 
-# rm db.json 
-# rm -rf public
-# rm peac2h-embedded-win.exe peac2h-embedded-linux
-tar -czf public.tar.gz public
+rm db.json 
+rm -rf public
+rm peac2h-embedded-win.exe peac2h-embedded-linux
+# tar -czf public.tar.gz public

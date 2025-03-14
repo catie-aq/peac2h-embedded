@@ -1,0 +1,261 @@
+
+// Likert style:
+.likert{
+  //width: 100%;
+  //height: 4em;
+
+  &-container{
+    // width: 90%;
+    margin: 0em auto;
+    //height: 4em;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.8em;
+    flex-direction: row;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  
+
+  // var(--sjs-primary-backcolor, var(--primary, #19b394));
+  &-item{
+    background-color: white;
+    border-color: #3c4f6d;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
+    color: #3c4f6d;
+
+    font-weight: 600;
+    font-size: smaller;
+    padding: 0.5em 0.5em;
+    border-radius: 0.8em;
+
+    cursor: pointer;
+    border: 1px solid  #3c4f6d;
+
+    transition: border 200ms, background-color 400ms, color 400ms;
+
+    &:hover{
+      background-color: var(--sjs-questionpanel-hovercolor, var(--sjs-general-backcolor-dark, rgb(248, 248, 248)));
+    }
+
+    &-selected{
+      color: white;
+      background-color: #3c4f6d;
+
+     &:hover{
+      background-color: #3c4f6d;
+      }
+    }
+  }
+}
+
+.sd-question--disabled .likert-item { 
+  &:hover{
+    cursor: not-allowed;
+  }
+
+  &-selected{
+    background-color: #c7c7c7;
+    color: white;
+    border: 1px solid #c7c7c7;
+
+    // &:hover{
+    //   background-color: white;
+    //   color: #3c4f6d;
+    // }
+  }
+}
+
+.likert-matrix{
+
+  margin: 0 auto;
+
+  &-row{
+
+    display:contents;
+  }
+
+  // &-text-one,&-text-two{
+  //   width: 10%;
+
+  // }
+
+  &-text {
+
+    min-width: 0px;
+
+    // @include fat-text;
+    color: #3c4f6d;
+    text-align: center;
+
+    overflow: hidden;
+    // text-overflow: ellipsis;
+    white-space: initial;
+    font-size: small;
+  }
+
+  &-items{
+
+    min-width: 0px;
+
+  //  width: 80%;
+    height: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-self: center;
+    gap: 0.5em;
+
+    @media (max-width: 768px) {
+      gap: 0.3em;
+    }
+  }
+
+  &-item{
+    width: 1.15em;
+    height: 1.15em;
+    border-radius: 50%;
+    border: 2px solid #3c4f6d;
+
+    &:hover{
+      cursor: pointer;
+    }
+
+    &-selected {
+      background-color: #3c4f6d;
+    }
+  }
+}
+
+.sd-question--disabled .likert-matrix, .sd-question--disabled .likert-matrix-item {
+  &:hover {
+    cursor: not-allowed;
+  }
+}
+
+
+////////// Slider //////////
+
+.slider-standard, .slider-tlx, .slider-tlx-nograd, .slider-custom{
+  // width: 37em; // see experiment.scss, default width is 55em
+  // margin: 2em 2em 2em 2em;
+  margin-bottom: 3.5em;
+  margin-top: 2em;
+
+  .noUi-value.noUi-value-horizontal.noUi-value-large {
+    margin-top: 1.5em;
+  }
+}
+
+.slider-tlx, .slider-tlx-nograd, .slider-custom {
+  .noUi-target {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid #aaaaaa;
+
+    .noUi-handle {
+      border: 1px solid #ef5245;
+      border-radius: 3px;
+      background: #ef5245;
+      cursor: default;
+      box-shadow: none;
+      width: 0.5em;
+      height: 3em;
+      right: -0.25em;
+      top: -0.6em;
+    
+      &:after, &:before {
+        display: none;
+      }
+    }
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: not-allowed; // not working with pointerevents: none
+    opacity: 0.7;
+  }
+}
+
+.slider-standard {
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
+.slider-tlx, .slider-tlx-nograd, .slider-custom{
+  // margin: 3.5em 3.5em;
+  // margin-left: 5.5em;
+
+   
+  .noUi-base, .noUi-connects {
+    height: 225%;
+    top: -95%;
+  }
+
+  // Text alignment
+  .noUi-value.noUi-value-horizontal.noUi-value-large {
+    margin-top: 2em;
+    color: #3c4f6d;
+    font-weight: bold;
+  }
+
+  .noUi-pips-horizontal {
+    top: -100%;
+
+    > :nth-child(2) {
+      transform: translate(0%, 0.5em);
+    }
+
+    > :nth-last-child(1) {
+      transform: translate(-100%, 0.5em);
+    }
+  }
+}
+
+.slider-custom .noUi-pips-horizontal .noUi-marker-horizontal {
+  height: 25px;
+}
+
+.slider-custom .noUi-pips-horizontal .noUi-marker-horizontal.noUi-marker-large {
+  height: 35px;
+  bottom: 45px;
+}
+
+
+
+
+.slider-tlx{
+  .noUi-pips-horizontal {
+     .noUi-marker-horizontal.noUi-marker-large {
+      height: 20px;
+        top: 17%;
+      &:nth-child(5n+1){
+        height: 30px;
+        top: 5%;
+      }
+      &:nth-child(21){
+        height: 58px;
+        top: -30%;
+      }
+    }
+  }  
+}
+
+
+
+.noUi-pips {
+  position: absolute;
+  color: #999;
+}
+
+.noUi-marker-large {
+  background: #AAA;
+}

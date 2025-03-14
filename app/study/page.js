@@ -1,103 +1,77 @@
 "use client"
-import 'survey-core/defaultV2.min.css';
-import useSWRImmutable from 'swr/immutable'
-import { Model } from 'survey-core';
-import { Survey } from 'survey-react-ui';
-import { useParams } from 'next/navigation'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import useSWR from 'swr'
+import {Input} from "@nextui-org/react";
+import Group from '../group'
 import { useSearchParams } from 'next/navigation'
-import { registerLikert } from '../widgets/QuestionLikertModel';
-import theme from "../survey-theme";
+import { useRouter } from 'next/navigation'
+import {Button } from "@nextui-org/react";
+import { SnackbarProvider } from 'notistack';
+
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-registerLikert();
 
 export default function Home() {
 
   const params = useSearchParams()
+  const router = useRouter()
 
-  let group = parseInt(params.get("group"));
-  let session = parseInt(params.get("session"));
-  let subject = params.get("subject");
-  
-  const { data, error, isLoading }= useSWRImmutable('http://localhost:3003/studies/', fetcher)
-  const { data: dataUser, error: errorUser, isLoading: isLoadingUser }= useSWRImmutable('http://localhost:3003/subjects/'+ subject, fetcher)
+  let studyId = parseInt(params.get("id"));
+
+  const { data, error, isLoading }= useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/studies/' + studyId, fetcher)
 
   if (error) return <div>échec du chargement</div>
   if (isLoading) return <div>chargement...</div>
-  if (errorUser) return <div>échec du chargement</div>
-  if (isLoadingUser) return <div>chargement...</div>
-
-  // xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
-
-  let group_data = data[0]["groups"][group]["time_periods"]
-  let session_data = group_data.find((time_period) => time_period["position"] == session);
-  let surveyJson = session_data["protocol"]
-
-  const survey = new Model(surveyJson);
-
-  survey.applyTheme(theme);
-
-  survey.data = dataUser["result-S" + session]
-
-  survey.onCurrentPageChanging.add(function (sender, options) {
-    // Display the "Saving..." message (pass a string value to display a custom message)
-    if(options.isNextPage){
-      const xhr = new XMLHttpRequest();
-      xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
-      xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-
-      xhr.onload = xhr.onerror = function () {
-        // console.log("Response LOAD: ", xhr);
-        if (xhr.status == 200 || xhr.status == 201) {
-          // Display the "Success" message (pass a string value to display a custom message)
-          // Alternatively, you can clear all messages:
-          // options.clearSaveMessages();
-        } else {
-          // Display the "Error" message (pass a string value to display a custom message)
-        }
-      };
-      let finalData = {}; 
-      finalData["result-S" + session] = sender.data; 
-      finalData["partial-S" + session] = true;
-      
-      finalData["result-S" + session].pageNo = survey.currentPageNo + 1;
-
-      xhr.send(JSON.stringify(finalData));
-    }
-  });
-
-  survey.onComplete.add(function (sender, options) {
-    // Display the "Saving..." message (pass a string value to display a custom message)
-    options.showSaveInProgress();
-    const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", "http://localhost:3003/subjects/"+ subject);
-    xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-
-    xhr.onload = xhr.onerror = function () {
-
-      // console.log("Response LOAD: ", xhr);
-      if (xhr.status == 200 || xhr.status == 201) {
-        // Display the "Success" message (pass a string value to display a custom message)
-        options.showSaveSuccess();
-        // Alternatively, you can clear all messages:
-        // options.clearSaveMessages();
-      } else {
-        // Display the "Error" message (pass a string value to display a custom message)
-        options.showSaveError();
-      }
-    };
-
-    let finalData = {}; 
-    finalData["result-S" + session] = sender.data;
-    finalData["result-S" + session].pageNo = survey.currentPageNo + 1;
-    finalData["partial-S" + session] = false;
-    xhr.send(JSON.stringify(finalData));
-  });
-
-
+  
+  let groups = data["groups"] 
+  let surveyJson = data["groups"][0]["time_periods"][0]["protocol"]
+  
+  let name = data["name"]
+  
   return (
-      <Survey model={survey} />
+    <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <Image priority 
+            className="flex justify-start mt-8 ml-8" 
+            src="/PEAC2H.png" 
+            width={200}
+            height={200}
+            alt="Peac²h logo" 
+            style={{display: "inline"}}/> 
+
+      {/* TODO: put this in a css class ? */}
+      <main className="font-sans flex flex-col items-center justify-between p-8">
+        <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
+          <div className="flex justify-between gap-12">
+            <Button className='white-button' onClick={() => router.push('/')}>Accueil</Button>
+            <h1 className="text-4xl bold-text">{ name }</h1>
+            <Button style={{cursor: "not-allowed"}} disabled>etat de l'étude</Button>
+          </div>
+
+          <h2 className='text-2xl mt-8 mb-4'> Groupes et sessions</h2>
+  
+          { 
+            groups.map((group, g_idx) => { 
+              if(g_idx === 0){
+                return (
+                  <div key={g_idx}>
+                    <Group group={group} g_idx={g_idx} studyId={studyId} showGroup={true}/>
+                  </div>
+                )
+              }else {
+                return (   
+                  <div key={g_idx}>
+                    <Group group={group} g_idx={g_idx} studyId={studyId} showGroup={false}/>
+                  </div>
+                ) }
+              })
+          }
+        </div>
+
+        
+      </main>
+    </SnackbarProvider>
   )
 }
-    
