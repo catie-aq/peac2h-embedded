@@ -1,11 +1,11 @@
 export async function createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate, mutateAllSubjects) {
-  const alreadyExists = allSubjects.some(subject => 
+  const alreadyExists = allSubjects.find(subject => 
     subject.name === userId &&
     subject.studyId === studyId
   );
   
   if (alreadyExists) {
-    return "Sujet déjà existant";
+    return "Sujet déjà existant dans le groupe " + alreadyExists["group"];
   }
 
   if (userId === "") {

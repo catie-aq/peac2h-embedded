@@ -185,19 +185,22 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     }
     
   }
-  
+
+  const groupBadgeColor = group["badge_color"] ? group["badge_color"] : "flamingo";
+  const groupBadgeClass = "color-capsule badge-color-" + groupBadgeColor;
 
   return (
     <>
 
       <Card className="mb-8 mt-4">
         <CardHeader className="flex justify-between gap-3 items-start">
-          <div>
-            <h3>Groupe {group.position}</h3>
+          <div className="flex flex-col gap-1">
+            <h3 className="gray-text">Groupe {group.position}</h3>
             <div className="flex gap-2">
               <h2 className="text-lg bold-text"> {group["name"]}  </h2>
               {DownloadGroupResultButton}
             </div>
+            <div className={groupBadgeClass}></div>
           </div>
         
         
@@ -211,16 +214,18 @@ export default function Group({group, g_idx, studyId, showGroup}) {
           {SubjectManagement(selectedSubject)}
 
 
-          <div key={g_idx} className="flex gap-10 flex-wrap ml-4" >
+          <div key={g_idx} className="flex gap-8 flex-wrap ml-4 mt-2" >
             { subjects.map((subject, s_idx) => { 
                 return ( 
-                  <Button key={s_idx} onClick={() => {OpenModal(subject)}}>{subject["name"]}</Button>
+                  <Button className="subject-button" key={s_idx} onClick={() => {OpenModal(subject)}}>{subject["name"]}</Button>
                 ) 
               }) 
             }
           </div>
 
-          <div className="flex gap-4 items-center mt-4 ml-4 mb-4"> {/* less collapse lag when margin are here... */}
+          <Divider className="mt-4"/>
+
+          <div className="flex gap-4 items-center justify-center m-4"> {/* less collapse lag when margin are here... */}
                     
             <Input
               label="ID participant"

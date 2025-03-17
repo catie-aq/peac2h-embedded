@@ -42,15 +42,15 @@ export default function Home() {
             style={{display: "inline"}}/> 
 
       {/* TODO: put this in a css class ? */}
-      <main className="font-sans flex flex-col items-center justify-between p-8">
+      <main className="font-sans flex flex-col items-center justify-between pl-8 pr-8">
         <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
-          <div className="flex justify-between gap-12">
-            <Button className='white-button' onClick={() => router.push('/')}>Accueil</Button>
-            <h1 className="text-4xl bold-text">{ name }</h1>
-            <Button style={{cursor: "not-allowed"}} disabled>etat de l'étude</Button>
+          <div className="study-menu">
+            <Button className='white-button min-w-[8em]' onClick={() => router.push('/')}>Accueil</Button>
+            <h1 className="text-4xl bold-text text-center">{ name }</h1>
+            <Button style={{cursor: "not-allowed"}} className='min-w-[8em]' disabled>État de l'étude</Button>
           </div>
 
-          <h2 className='text-2xl mt-8 mb-4'> Groupes et sessions</h2>
+          <h2 className='text-2xl mt-16 mb-4 bold-text'> Groupes et sessions</h2>
   
           { 
             groups.map((group, g_idx) => { 
