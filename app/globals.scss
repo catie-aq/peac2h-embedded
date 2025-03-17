@@ -26,6 +26,8 @@ html {
   --top-gradient-2: #080835;
   --top-gradient-1-step: 50%;
   --top-gradient-2-step: 100%;
+  --gray-text-color: #6c757d;
+  --badge-text-color: #393e46;
 
 
   --survey-main-color: #3c4f6d;
@@ -33,6 +35,60 @@ html {
   --progress-init: #9eb5cd75;
   --progress-blue: #6672fb;
   --progress-orange: #f8b849;
+}
+
+@mixin badge {
+  // @include small-text;
+  border-radius: 9rem;
+  padding: 0.3em 0.5em 0.3em 0.5em;
+}
+
+.badge {
+  @include badge();
+  color: var(--badge-text-color);
+}
+
+.color-capsule {
+  width: 10em;
+  height: 0.5em;
+  min-width: 0.5em;
+  // height: 3.2em;
+  //background-color: red;
+  border-radius: 1em;
+  // margin: 0.25em 0.5em;
+  flex-wrap: wrap;
+}
+
+
+$colors: (
+  "flamingo": #ef5245,
+  "java": #1ee1da,
+  "casablanca": #f8b849,
+  "cornflower-blue": #6672fb,
+  "bright-sun": #ffe53d,
+  "lavender-rose": #ff85d6,
+  "granny-smith-apple": #a1e69c,
+  "heliotrope": #cc82f1,
+  "antique-brass": #c79870,
+  "malibu": #1ee1da,
+  "mona-lisa": #ff9797,
+  "silver": #b9b9b9,
+);
+
+@each $name, $color in $colors {
+  .badge-color-#{$name} {
+    background-color: $color !important;
+  }
+}
+
+@each $name, $color in $colors {
+  .border-color-#{$name} {
+    border-color: $color;
+  }
+}
+
+.gray-text {
+  color: var(--gray-text-color);
 }
 
 .file-upload {
@@ -193,6 +249,31 @@ html {
 
 .progress-bar-complete progress[value]::-webkit-progress-value {
   background: var(--success-color);
+}
+
+.subject-button {
+  background-color: var(--white);
+  border: 1px solid var(--dark-blue);
+
+  &:hover {
+    background-color: var(--dark-blue);
+    color: var(--white);
+  }
+}
+
+.study-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  // margin-top: 1rem;
+  @media(min-width: 768px){
+    flex-direction: row;
+    gap: 4rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 }
 
 /* 

@@ -25,7 +25,7 @@
     "react-collapsed": "^4.2.0",
     "react-dom": "18",
     "sass": "^1.69.4",
-    "survey-react-ui": "^1.9.111",
+    "survey-react-ui": "^2.0.0",
     "swr": "^2.2.4"
   },
   "devDependencies": {

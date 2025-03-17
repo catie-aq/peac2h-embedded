@@ -154,10 +154,12 @@ export default function Home() {
       <main className="font-sans flex flex-col items-center justify-between">
         <div className="z-10 max-w-6xl w-full items-center justify-between font-mono text-sm">
           <div className="flex justify-center">
-            <Button className='white-button white-button-big' onClick={() => setOpen(true)}>
+            <Button className='white-button white-button-big mb-8' onClick={() => setOpen(true)}>
               Importer une étude
             </Button>
           </div>
+
+          <h2 className='text-2xl mt-8 mb-4 bold-text'> Mes études</h2>
 
           <div direction="row" className="study-list">
 
@@ -167,7 +169,7 @@ export default function Home() {
                   <Card className="study-card mb-8 mt-4">
                     <div className="study-card-header">
                       <span></span>
-                      <h3 className="flex justify-center"> Étude {study["id"]} </h3>
+                      <h3 className="flex justify-center gray-text"> Étude {study["id"]} </h3>
                       
                       <DeleteStudyButton id={study["id"]}/>
 
