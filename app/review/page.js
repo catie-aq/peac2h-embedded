@@ -47,6 +47,7 @@ export default function Home() {
   let surveyJson = session_data["protocol"]
 
   const survey = new Model(surveyJson);
+  survey.locale = "fr";
   survey.applyTheme(theme);
 
   if(subjectData){
