@@ -1,0 +1,425 @@
+{
+  "name": "test questionnaire all items",
+  "description": "Étude à partir d'un questionnaire.",
+  "owner_id": 1878,
+  "owner_type": "User",
+  "visibility": "private",
+  "subject_amount": 0,
+  "long_description": {
+    "id": null,
+    "name": "long_description",
+    "body": null,
+    "record_type": "ExperimentalStudy",
+    "record_id": 9351,
+    "created_at": null,
+    "updated_at": null
+  },
+  "study_variables": [],
+  "groups": [
+    {
+      "name": "Groupe principal",
+      "template": "sujet #",
+      "position": 0,
+      "code": null,
+      "subjects": [],
+      "id": 10550,
+      "time_periods": [
+        {
+          "name": "Temporalité unique",
+          "position": 0,
+          "protocol": {
+            "pages": [
+              {
+                "name": "page1",
+                "elements": [
+                  {
+                    "name": "GP:0-TP:0-EC:20903::choix1",
+                    "type": "radiogroup",
+                    "title": "exemple de choix",
+                    "choices": [
+                      "Item 1",
+                      "Item 2",
+                      "Item 3"
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::choix2",
+                    "type": "rating",
+                    "title": "2eme question",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::choix4",
+                    "type": "checkbox",
+                    "title": "question 4 : un choix",
+                    "choices": [
+                      "Item 1",
+                      "Item 2",
+                      "Item 3"
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::variable5",
+                    "type": "dropdown",
+                    "title": "exemple de variable",
+                    "choices": [
+                      "Item 1",
+                      "Item 2",
+                      "Item 3"
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::choix6",
+                    "type": "boolean",
+                    "title": "oui ou non",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::choix-item",
+                    "type": "ranking",
+                    "title": "choix d'items",
+                    "choices": [
+                      "Item 1",
+                      "Item 2",
+                      "Item 3"
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::img-multiple",
+                    "type": "imagepicker",
+                    "title": "choix d'images",
+                    "choices": [
+                      {
+                        "value": "Image 1",
+                        "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/lion.jpg"
+                      },
+                      {
+                        "value": "Image 2",
+                        "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/giraffe.jpg"
+                      },
+                      {
+                        "value": "Image 3",
+                        "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/panda.jpg"
+                      },
+                      {
+                        "value": "Image 4",
+                        "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/camel.jpg"
+                      }
+                    ],
+                    "imageFit": "cover",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::reponse8",
+                    "type": "text",
+                    "title": "réponse libre",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::paragraphe9",
+                    "type": "comment",
+                    "title": "paragraphe",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::multiple-choice",
+                    "type": "multipletext",
+                    "items": [
+                      {
+                        "name": "text1"
+                      },
+                      {
+                        "name": "text2"
+                      }
+                    ],
+                    "title": "choix multiple",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::temps-reaction",
+                    "rows": [
+                      "Row 1",
+                      "Row 2"
+                    ],
+                    "type": "matrix",
+                    "title": "Temps de réaction",
+                    "columns": [
+                      "Column 1",
+                      "Column 2",
+                      "Column 3"
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::column-choice",
+                    "rows": [
+                      "Row 1",
+                      "Row 2"
+                    ],
+                    "type": "matrixdropdown",
+                    "title": "Question 12",
+                    "choices": [1, 2, 3, 4, 5],
+                    "columns": [
+                      {
+                        "name": "Column 1"
+                      },
+                      {
+                        "name": "Column 2"
+                      },
+                      {
+                        "name": "Column 3"
+                      }
+                    ],
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::likert-matrix",
+                    "type": "likertmatrix",
+                    "title": "Choix entre plusieurs options",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::likert-first",
+                    "type": "likert",
+                    "title": "avis\n",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::charge-mentale",
+                    "type": "nouislider",
+                    "title": "slider classique",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::charge-cognitive",
+                    "type": "nouislidertlx",
+                    "title": "slider numérique",
+                    "prefixed": true
+                  },
+                  {
+                    "name": "GP:0-TP:0-EC:20903::etat_fatigue",
+                    "type": "nouislidercustom",
+                    "title": "slider ",
+                    "prefixed": true
+                  }
+                ],
+                "protocol_id": "20903",
+                "single_page": false
+              },
+              {
+                "name": "page2",
+                "elements": [
+                  {
+                    "name": "GP:0-TP:0-EC:20903::champ_libre",
+                    "type": "text",
+                    "title": "saisie libre",
+                    "prefixed": true
+                  }
+                ],
+                "protocol_id": "20903",
+                "single_page": false
+              }
+            ],
+            "locale": "fr"
+          },
+          "id": 11982,
+          "experience_configurations": [
+            {
+              "name": "questionnaire",
+              "content": {
+                "sha": "6b41334eb23924f67481458f0febdf91c73d974cde3c7a6c7cc0e7615e4fe795",
+                "uuid": "77d840ac-9757-4300-97d8-0eb7943c516a",
+                "pages": [
+                  {
+                    "name": "page1",
+                    "elements": [
+                      {
+                        "name": "choix1",
+                        "type": "radiogroup",
+                        "title": "exemple de choix",
+                        "choices": [
+                          "Item 1",
+                          "Item 2",
+                          "Item 3"
+                        ]
+                      },
+                      {
+                        "name": "choix2",
+                        "type": "rating",
+                        "title": "2eme question"
+                      },
+                      {
+                        "name": "choix4",
+                        "type": "checkbox",
+                        "title": "question 4 : un choix",
+                        "choices": [
+                          "Item 1",
+                          "Item 2",
+                          "Item 3"
+                        ]
+                      },
+                      {
+                        "name": "variable5",
+                        "type": "dropdown",
+                        "title": "exemple de variable",
+                        "choices": [
+                          "Item 1",
+                          "Item 2",
+                          "Item 3"
+                        ]
+                      },
+                      {
+                        "name": "choix6",
+                        "type": "boolean",
+                        "title": "oui ou non"
+                      },
+                      {
+                        "name": "choix-item",
+                        "type": "ranking",
+                        "title": "choix d'items",
+                        "choices": [
+                          "Item 1",
+                          "Item 2",
+                          "Item 3"
+                        ]
+                      },
+                      {
+                        "name": "img-multiple",
+                        "type": "imagepicker",
+                        "title": "choix d'images",
+                        "choices": [
+                          {
+                            "value": "Image 1",
+                            "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/lion.jpg"
+                          },
+                          {
+                            "value": "Image 2",
+                            "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/giraffe.jpg"
+                          },
+                          {
+                            "value": "Image 3",
+                            "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/panda.jpg"
+                          },
+                          {
+                            "value": "Image 4",
+                            "imageLink": "https://surveyjs.io/Content/Images/examples/image-picker/camel.jpg"
+                          }
+                        ],
+                        "imageFit": "cover"
+                      },
+                      {
+                        "name": "reponse8",
+                        "type": "text",
+                        "title": "réponse libre"
+                      },
+                      {
+                        "name": "paragraphe9",
+                        "type": "comment",
+                        "title": "paragraphe"
+                      },
+                      {
+                        "name": "multiple-choice",
+                        "type": "multipletext",
+                        "items": [
+                          {
+                            "name": "text1"
+                          },
+                          {
+                            "name": "text2"
+                          }
+                        ],
+                        "title": "choix multiple"
+                      },
+                      {
+                        "name": "temps-reaction",
+                        "rows": [
+                          "Row 1",
+                          "Row 2"
+                        ],
+                        "type": "matrix",
+                        "title": "Temps de réaction",
+                        "columns": [
+                          "Column 1",
+                          "Column 2",
+                          "Column 3"
+                        ]
+                      },
+                      {
+                        "name": "column-choice",
+                        "rows": [
+                          "Row 1",
+                          "Row 2"
+                        ],
+                        "type": "matrixdropdown",
+                        "title": "Question 12",
+                        "choices": [1, 2, 3, 4, 5],
+                        "columns": [
+                          {
+                            "name": "Column 1"
+                          },
+                          {
+                            "name": "Column 2"
+                          },
+                          {
+                            "name": "Column 3"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "likert-matrix",
+                        "type": "likertmatrix",
+                        "title": "Choix entre plusieurs options"
+                      },
+                      {
+                        "name": "likert-first",
+                        "type": "likert",
+                        "title": "avis\n"
+                      },
+                      {
+                        "name": "charge-mentale",
+                        "type": "nouislider",
+                        "title": "slider classique"
+                      },
+                      {
+                        "name": "charge-cognitive",
+                        "type": "nouislidertlx",
+                        "title": "slider numérique"
+                      },
+                      {
+                        "name": "etat_fatigue",
+                        "type": "nouislidercustom",
+                        "title": "slider "
+                      }
+                    ],
+                    "protocol_id": "20903",
+                    "single_page": false
+                  },
+                  {
+                    "name": "page2",
+                    "elements": [
+                      {
+                        "name": "champ_libre",
+                        "type": "text",
+                        "title": "saisie libre"
+                      }
+                    ],
+                    "protocol_id": "20903",
+                    "single_page": false
+                  }
+                ]
+              },
+              "position": 0,
+              "instructions": "",
+              "experimentable_id": 3235,
+              "experimentable_type": "Survey"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
