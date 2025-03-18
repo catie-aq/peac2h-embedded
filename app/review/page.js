@@ -1,7 +1,7 @@
 "use client"
-// import 'survey-core/defaultV2.min.css';
+import 'survey-core/defaultV2.min.css';
 import "survey-core/i18n/french";
-import 'survey-core/survey-core.min.css';
+// import 'survey-core/survey-core.min.css';
 import useSWR from 'swr'
 import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
