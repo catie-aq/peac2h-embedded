@@ -136,16 +136,17 @@ export default function Home() {
                             { subjects.map((subject, s_idx) => {
                               let inProgress = subject.hasOwnProperty("partial-S" + t_idx)
                               let finished = !subject["partial-S" + t_idx] && subject["partial-S" + t_idx] != undefined
-                              let textClass = ""
-                              if(finished){
-                                textClass = "green"
-                              }
+                              let textColor = ""
                               if(inProgress){
-                                textClass = "orange"
+                                textColor = "orange"
                               }
-                                return (
-                                <h3 style={{ color: textClass }}>{subject["name"]}</h3>
-                                )
+                              if(finished){
+                                textColor = "green"
+                              }
+                              
+                              return (
+                              <h3 style={{ color: textColor }}>{subject["name"]}</h3>
+                              )
                             })}
                           </div>
                         </div>
