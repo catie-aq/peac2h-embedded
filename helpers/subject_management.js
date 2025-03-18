@@ -1,11 +1,11 @@
-export async function createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate, mutateAllSubjects) {
+export async function createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutateAllSubjects) {
   const alreadyExists = allSubjects.find(subject => 
     subject.name === userId &&
     subject.studyId === studyId
   );
   
   if (alreadyExists) {
-    return "Sujet déjà existant dans le groupe " + alreadyExists["group"];
+    return "Sujet déjà existant dans le groupe " + (alreadyExists["group"]+1);
   }
 
   if (userId === "") {
@@ -31,7 +31,7 @@ export async function createSubject(allSubjects, userId, setuserId, g_idx, study
       // Ask for revalidation
       setuserId("");
       mutateAllSubjects();
-      mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?group=` + g_idx + '&studyId=' + studyId)
+      //mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?group=` + g_idx + '&studyId=' + studyId)
     })  
     .catch(error => console.error(error));
 
@@ -40,15 +40,16 @@ export async function createSubject(allSubjects, userId, setuserId, g_idx, study
 }
 
 
-export async function deleteSubject(subjectId, mutate, g_idx, studyId) {
+export async function deleteSubject(subjectId, mutateAllSubjects, g_idx, studyId) {
   fetch(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/${subjectId}`, {
     method: 'DELETE',
   })
     .then(response => response.json())
     .then(data => { 
       // console.log("Deleted", data)
-      mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?group=${g_idx}&studyId=${studyId}`)
-      mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?studyId=${studyId}`)
+      // mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?group=${g_idx}&studyId=${studyId}`)
+      mutateAllSubjects();
+      // mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?studyId=${studyId}`)
     })
     .catch((error) => {
       console.error('Error:', error);

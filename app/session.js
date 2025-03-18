@@ -10,7 +10,7 @@ import 'tippy.js/dist/tippy.css';
 import { ComputePagesNumber } from "@/progress_bar";
 import tippy from "tippy.js";
 
-export default function Session({session, s_idx, g_idx, group, subject, studyId}) {
+export default function Session({session, s_idx, g_idx, subject, studyId}) {
 
   let session_name = session["name"]
   if(session_name === "" || session_name === undefined){

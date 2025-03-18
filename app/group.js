@@ -18,28 +18,27 @@ import { createSubject, deleteSubject } from "@/helpers/subject_management";
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
-export default function Group({group, g_idx, studyId, showGroup}) {
-  const { mutate } = useSWRConfig()
+export default function Group({group, g_idx, studyId, subjects, allSubjects, mutate, showGroup}) {
+  // const { mutate } = useSWRConfig()
 
   const [userId, setuserId] = useState(''); // Declare a state variable...
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   
-  const { data, error, isLoading }= useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/?group=' + g_idx + '&studyId=' + studyId, fetcher)
-  const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading, mutate: mutateAllSubjects} = useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/?studyId=' + studyId, fetcher);
+  // const { data: allSubjects, error: allSubjectsError, isLoading: allSubjectsLoading, mutate: mutateAllSubjects} = useSWR(process.env.NEXT_PUBLIC_JSON_SERVER_URL + '/subjects/?studyId=' + studyId, fetcher);
 
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({
     defaultExpanded: showGroup,
   });
  
-  if (error || allSubjectsError){ 
-     return <div>échec du chargement</div>
-  }
-  if (isLoading || allSubjectsLoading) {
-    return <div>chargement...</div>
-  } 
+  // if (allSubjectsError){ 
+  //    return <div>échec du chargement</div>
+  // }
+  // if (allSubjectsLoading) {
+  //   return <div>chargement...</div>
+  // } 
 
-  let subjects = data;
+  // let subjects = data;
 
   function CreateSubjectButton() {
     const { enqueueSnackbar } = useSnackbar();
@@ -52,7 +51,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     return (
       <Button className="white-button"
       onClick={async () => {
-        let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate, mutateAllSubjects);
+        let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate);
         if(res == "ok"){
           handleClickVariant('success','Sujet créé !');
         }
@@ -168,8 +167,8 @@ export default function Group({group, g_idx, studyId, showGroup}) {
               { time_periods.map((time_period, t_idx) => {
                 return (
  
-                  <Session key={t_idx} session={time_period} s_idx={time_period["position"]} group={group} 
-                            g_idx={g_idx} subjects={subjects} studyId={studyId} subject={subject}>
+                  <Session key={t_idx} session={time_period} s_idx={time_period["position"]} 
+                            g_idx={g_idx} studyId={studyId} subject={subject}>
                   </Session>
 
                 )
