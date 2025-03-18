@@ -1,7 +1,7 @@
 "use client"
-// import 'survey-core/defaultV2.min.css';
+import 'survey-core/defaultV2.min.css';
 import "survey-core/i18n/french";
-import 'survey-core/survey-core.min.css';
+// import 'survey-core/survey-core.min.css';
 import useSWRImmutable from 'swr/immutable'
 import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
