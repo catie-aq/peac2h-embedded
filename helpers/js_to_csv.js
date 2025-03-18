@@ -100,7 +100,7 @@ export function downloadCSV(result, session) {
   
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `Resultats_${result.name}_S${session.position}.csv`);
+  link.setAttribute("download", `Resultats_${result.name}_S${session.position+1}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -113,7 +113,7 @@ export function downloadCSVGroup(result, group, session) {
     
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `Resultats_G${group}_S${session}.csv`);
+    link.setAttribute("download", `Resultats_G${group+1}_S${session+1}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -8,10 +8,13 @@ import {Input} from "@nextui-org/react";
 import Group from '../group'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import {Button } from "@nextui-org/react";
+import {Button, Divider } from "@nextui-org/react";
 import { SnackbarProvider } from 'notistack';
 import Session from "../session";
 import { Dialog, DialogContent, DialogTitle, Tabs, Tab, Box, Typography } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
 
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -95,7 +98,7 @@ export default function Home() {
           </div>
         </DialogTitle>
         <DialogContent style={{ overflow: "visible", height: "70vh", width: "80vw" }}>
-          <div className='flex justify-center'>
+          <div className='flex justify-center mb-4'>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -118,6 +121,7 @@ export default function Home() {
       
           </Tabs>
           </div>
+          <Divider/>
             { groups.map((group, g_idx) => {
               if(g_idx === value){
                 const time_periods = group["time_periods"]
@@ -125,31 +129,29 @@ export default function Home() {
                 return (
                   <div key={g_idx}>
                     {/* <Typography variant="h6">Contenu de l'onglet {g_idx}</Typography> */}
-                    <div className="flex flex-row gap-6 mt-4 justify-center">
+                    <div className="flex flex-row gap-6 mt-4 justify-around">
                     { time_periods.map((time_period, t_idx) => {
                       return (
         
-                        <div className='flex flex-row justify-center'>
-                          
-                          <div className='flex flex-col gap-4 items-center'>
-                            <h3 className='text-center bold-text'>{time_period["name"]}</h3>
-                            { subjects.map((subject, s_idx) => {
-                              let inProgress = subject.hasOwnProperty("partial-S" + t_idx)
-                              let finished = !subject["partial-S" + t_idx] && subject["partial-S" + t_idx] != undefined
-                              let textColor = ""
-                              if(inProgress){
-                                textColor = "orange"
-                              }
-                              if(finished){
-                                textColor = "green"
-                              }
-                              
-                              return (
-                              <h3 style={{ color: textColor }}>{subject["name"]}</h3>
-                              )
-                            })}
-                          </div>
+                        <div key={t_idx} className='flex flex-col gap-4 items-center'>
+                          <h3 className='text-center bold-text'>{time_period["name"]}</h3>
+                          { subjects.map((subject, s_idx) => {
+                            let inProgress = subject.hasOwnProperty("partial-S" + t_idx)
+                            let finished = !subject["partial-S" + t_idx] && subject["partial-S" + t_idx] != undefined
+                            let textColor = "var(--dark-blue)"
+                            if(inProgress){
+                              textColor = "orange"
+                            }
+                            if(finished){
+                              textColor = "lightgray"
+                            }
+                            
+                            return (
+                            <h3 style={{ color: textColor }}>{subject["name"]}</h3>
+                            )
+                          })}
                         </div>
+                   
       
                       )
                     })}
@@ -201,10 +203,18 @@ export default function Home() {
           <div className="study-menu">
             <Button className='white-button min-w-[8em]' onClick={() => router.push('/')}>Accueil</Button>
             <h1 className="text-4xl bold-text text-center">{ name }</h1>
-            <Button className='min-w-[8em]' onClick={() => setOpen(true)}>État de l'étude</Button>
+            <span></span>
+            
           </div>
 
-          <h2 className='text-2xl mt-16 mb-4 bold-text'> Groupes et sessions</h2>
+          <div className="flex justify-center mt-4">
+            <Tippy content="Overview de l'étude">
+              <button onClick={() => setOpen(true)}>
+                <VisibilityIcon fontSize='large'/>
+              </button>
+            </Tippy>
+          </div>
+          <h2 className='text-2xl mt-12 mb-4 bold-text'> Groupes et sessions</h2>
   
           { 
             groups.map((group, g_idx) => { 

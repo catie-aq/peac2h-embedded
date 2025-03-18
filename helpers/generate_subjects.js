@@ -14,7 +14,7 @@ studySubjects.map(id => {
     body: JSON.stringify({
       name: `s_${id}`, // name instead of id to avoid duplicate ids within multiple studies, maybe to reconsider
       group: 0,
-      studyId: 4
+      studyId: 3
     })
   })
     .then(response => response.json())

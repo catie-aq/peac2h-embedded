@@ -12,6 +12,7 @@ import { useCollapse } from "react-collapsed";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { createSubject, deleteSubject } from "@/helpers/subject_management";
 
@@ -75,7 +76,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
     const session = time_periods[0]["position"]
     DownloadGroupResultButton = (
       <Tippy content="Télécharger les résultats de tous les sujets de ce groupe" placement="top" appendTo={document.body}>
-        <button onClick={() => downloadCSVGroup(subjects, g_idx, session)}><FileDownloadIcon/></button>
+        <button onClick={() => downloadCSVGroup(subjects, g_idx, session)}><FileDownloadOutlinedIcon/></button>
       </Tippy>)
   }
   else {
@@ -94,7 +95,7 @@ export default function Group({group, g_idx, studyId, showGroup}) {
         }
         >
         <button>
-          <FileDownloadIcon/>
+        <FileDownloadOutlinedIcon fontSize="medium"/>
         </button>
       </Tippy>
     )
@@ -195,12 +196,12 @@ export default function Group({group, g_idx, studyId, showGroup}) {
       <Card className="mb-8 mt-4">
         <CardHeader className="flex justify-between gap-3 items-start">
           <div className="flex flex-col gap-1">
-            <h3 className="gray-text">Groupe {group.position}</h3>
+            <h3 className="gray-text">Groupe {group.position+1}</h3>
             <div className="flex gap-2">
               <h2 className="text-lg bold-text"> {group["name"]}  </h2>
               {DownloadGroupResultButton}
             </div>
-            <div className={groupBadgeClass}></div>
+            {/* <div className={groupBadgeClass}></div> */}
           </div>
         
         
