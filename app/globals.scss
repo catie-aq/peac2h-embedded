@@ -276,6 +276,18 @@ $colors: (
   }
 }
 
+.study-management {
+  height: 50em;
+}
+
+.text_orange {
+  color: var(--progress-orange);
+}
+
+.text-green {
+  color: var(--success-color);
+}
+
 /* 
 :root {
   --foreground-rgb: 0, 0, 0;
