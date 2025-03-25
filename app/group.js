@@ -30,23 +30,15 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({
     defaultExpanded: showGroup,
   });
- 
-  // if (allSubjectsError){ 
-  //    return <div>échec du chargement</div>
-  // }
-  // if (allSubjectsLoading) {
-  //   return <div>chargement...</div>
-  // } 
 
-  // let subjects = data;
+  const { enqueueSnackbar } = useSnackbar();
+          
+  function handleClickVariant(variant, message){
+    // variant could be success, error, warning, info, or default
+    enqueueSnackbar(message, { variant });
+  };
 
   function CreateSubjectButton() {
-    const { enqueueSnackbar } = useSnackbar();
-  
-    function handleClickVariant(variant, message){
-      // variant could be success, error, warning, info, or default
-      enqueueSnackbar(message, { variant });
-    };
 
     return (
       <Button className="white-button"
@@ -112,12 +104,6 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
     }
 
     function DeleteSubjectButton() {
-        const { enqueueSnackbar } = useSnackbar();
-          
-        function handleClickVariant(variant, message){
-          // variant could be success, error, warning, info, or default
-          enqueueSnackbar(message, { variant });
-        };
     
         return (
           <Button 
@@ -233,6 +219,17 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
               onChange={e => setuserId(e.target.value)}
               // defaultValue="S01"
               className="max-w-xs"
+              onKeyDown={async(e) => {
+                if (e.key === 'Enter') {
+                  let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate);
+                  if(res == "ok"){
+                    handleClickVariant('success','Sujet créé !');
+                  }
+                  else{
+                    handleClickVariant('error','Erreur lors de la création ! : ' + res);
+                  }
+                }
+              }}
             />
             <CreateSubjectButton/>
             

@@ -95,6 +95,9 @@ export class SurveyQuestionLikertMatrix extends SurveyQuestionElementBase {
     const question = this.question;
     // L'objet results contient les réponses pour chaque ligne
     const results = question.value || {};
+    if(question.choiceValue === undefined){
+      question.choiceValue = [-3, -2, -1, 0, 1, 2, 3]
+    }
 
     return (
       <div className="likert-matrix grid-cols-4 grid">
