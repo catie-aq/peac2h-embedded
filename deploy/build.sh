@@ -27,19 +27,21 @@ yarn install
 # Compile the exe for index.js with PKG
 
 # Build windows and linux binary for JSON-server
-pkg -t node16-win-x64,node16-linux-x64 index.js -o peac2h-embedded
+pkg -t node16-win-x64,node16-linux-x64,node16-macos-x64 index.js -o peac2h-embedded
 
 # Build windows and linux binary for converter
 # pkg -t node16-win-x64,node16-linux-x64 convert.js -o study-to-db
 
 rm linux.tar.gz
 rm windows.zip
+rm macos.gz
 
 tar -czf "linux.tar.gz" peac2h-embedded-linux db.json public
 zip -r windows.zip peac2h-embedded-win.exe db.json public
+tar -czf "macos.tar.gz" peac2h-embedded-macos db.json public
 
 ## Cleanup 
 rm db.json 
 rm -rf public
-rm peac2h-embedded-win.exe peac2h-embedded-linux
+rm peac2h-embedded-win.exe peac2h-embedded-linux peac2h-embedded-macos
 # tar -czf public.tar.gz public
