@@ -64,7 +64,7 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
   let DownloadGroupResultButton = (<></>)
 
   if (time_periods.length === 1) {
-    const session = time_periods[0]["position"]
+    const session = time_periods[0]
     DownloadGroupResultButton = (
       <Tippy content="Télécharger les résultats de tous les sujets de ce groupe" placement="top" appendTo={document.body}>
         <button onClick={() => downloadCSVGroup(subjects, g_idx, session)}><FileDownloadOutlinedIcon/></button>
@@ -80,7 +80,7 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
         content={
           <div className="flex flex-col gap-2">
           {time_periods.map((time_period, t_idx) => (
-            <button key={t_idx} onClick={() => downloadCSVGroup(subjects, g_idx, time_period["position"])}>{time_period.name}</button>
+            <button key={t_idx} onClick={() => downloadCSVGroup(subjects, g_idx, time_period)}>{time_period.name}</button>
           ))}
           </div>
         }

@@ -166,7 +166,7 @@ export default function Home() {
             { data.map((study, s_idx) => {
               return (
                 <div key={s_idx}>
-                  <Card className="study-card mb-8 mt-4">
+                  <Card className="study-card">
                     <div className="study-card-header">
                       <span></span>
                       <h3 className="flex justify-center gray-text"> Étude {study["id"]} </h3>
