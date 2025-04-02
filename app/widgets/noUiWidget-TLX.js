@@ -1,4 +1,5 @@
-// import noUiSlider from "nouislider";
+import * as Survey from "survey-core";
+import noUiSlider from "nouislider";
 
 function init(Survey, noUiSlider) {
   var widget = {
@@ -11,7 +12,7 @@ function init(Survey, noUiSlider) {
     isFit: function (question) {
       return question.getType() === "nouislidertlx";
     },
-    htmlTemplate: "<div class='slider-tlx'><div></div></div>",
+    htmlTemplate: "",
     activatedByChanged: function (activatedBy) {
       Survey.JsonObject.metaData.addClass("nouislidertlx", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("nouislidertlx", []);
@@ -28,45 +29,100 @@ function init(Survey, noUiSlider) {
         default: "Très élevé",
       });
 
+      Survey.Serializer.addProperty("nouislidertlx", {
+        name: "Graduation:boolean",
+        category: "general",
+        default: "true",
+      });
+
     },
     afterRender: function (question, el) {
+
+      if(question.Graduation === false){
+        el.className = "slider-tlx-nograd noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr";
+      }else{
+        el.className = "slider-tlx noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr";
+      };
+
+      el.classList.add("slider-tlx");
+
       var pipsValues = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100];
-      var slider = noUiSlider.create(el, {
-        start: question.value || 50,
-        step: 1,
-        pips: {
-          mode: "values",
-          values: pipsValues.map(function (pVal) {
-            var pipValue = pVal;
-            if (pVal.value !== undefined) {
-              pipValue = pVal.value;
-            }
-            return parseInt(pipValue);
-          }),
-          density: 5,
-          format: {
-            to: function (pVal) {
-              var pipText = pVal;
-              pipsValues.map(function (el) {
-                if (el.text !== undefined && pVal === el.value) {
-                  pipText = el.text;
-                }  
-              });
-              if(pipsValues.indexOf(pVal) === 0)
-                return question.textLowLimit
-              else if(pipsValues.indexOf(pVal) === (pipsValues.length -1) )
-                return question.textHighLimit
-              return "";
+
+      // List of pips value.
+      let initSlider = () => {
+        let slider = noUiSlider.create(el, {
+          start: question.value || 50,
+          step: 1,
+          pips: {
+            mode: "values",
+            values: pipsValues.map(function (pVal) {
+              var pipValue = pVal;
+              if (pVal.value !== undefined) {
+                pipValue = pVal.value;
+              }
+              return parseInt(pipValue);
+            }),
+            density: 5,
+            format: {
+              to: function (pVal) {
+                var pipText = pVal;
+                pipsValues.map(function (el) {
+                  if (el.text !== undefined && pVal === el.value) {
+                    pipText = el.text;
+                  }  
+                });
+                if(pipsValues.indexOf(pVal) === 0)
+                  return question.textLowLimit
+                else if(pipsValues.indexOf(pVal) === (pipsValues.length -1) )
+                  return question.textHighLimit
+                return "";
+              },
             },
           },
-        },
-        range: {
-          min: 0,
-          max: 100,
-        },
-        orientation: "horizontal",
-        direction: "ltr",
-      });
+          range: {
+            min: 0,
+            max: 100,
+          },
+          orientation: "horizontal",
+          direction: "ltr",
+        });
+        return slider;
+      }
+
+      let updateSlider = () => {
+        slider.updateOptions({
+
+          pips: {
+            mode: "values",
+            values: pipsValues.map(function (pVal) {
+              var pipValue = pVal;
+              if (pVal.value !== undefined) {
+                pipValue = pVal.value;
+              }
+              return parseInt(pipValue);
+            }),
+            density: 5,
+            format: {
+              to: function (pVal) {
+                var pipText = pVal;
+                pipsValues.map(function (el) {
+                  if (el.text !== undefined && pVal === el.value) {
+                    pipText = el.text;
+                  }  
+                });
+                if(pipsValues.indexOf(pVal) === 0)
+                  return question.textLowLimit
+                else if(pipsValues.indexOf(pVal) === (pipsValues.length -1) )
+                  return question.textHighLimit
+                return "";
+              },
+            },
+          },
+        });
+      }
+
+      var slider = initSlider(question, el);
+
       slider.on("change", function () {
         question.value = Number(slider.get());
       });
@@ -86,6 +142,17 @@ function init(Survey, noUiSlider) {
           el.removeAttribute("disabled");
         }
       };
+
+      question.registerFunctionOnPropertyValueChanged("textLowLimit", updateSlider);
+      question.registerFunctionOnPropertyValueChanged("textHighLimit", updateSlider);
+      // change the htmlTemplate to class='slider-tlx-nograd' when Graduation is false
+      question.registerFunctionOnPropertyValueChanged("Graduation", function () {
+        if (question.Graduation === false) {
+          el.className = "slider-tlx-nograd noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr";
+        } else {
+          el.className = "slider-tlx noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr";
+        }
+      });
     },
     willUnmount: function (question, el) {
       if (!!question.noUiSlider) {
@@ -127,7 +194,9 @@ function init(Survey, noUiSlider) {
 }
 
 if (typeof Survey !== "undefined") {
-  init(Survey);
+  init(Survey, noUiSlider);
+}else {
+  console.log("Connot init TLX Widget")
 }
 
 export default init;

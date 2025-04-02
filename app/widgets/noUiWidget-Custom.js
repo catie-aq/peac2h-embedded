@@ -1,4 +1,5 @@
-// import noUiSlider from "nouislider";
+import * as Survey from "survey-core";
+import noUiSlider from "nouislider";
 
 function init(Survey, noUiSlider) {
   var widget = {
@@ -10,7 +11,7 @@ function init(Survey, noUiSlider) {
     isFit: function (question) {
       return question.getType() === "nouislidercustom";
     },
-    htmlTemplate: "<div class='slider-custom'><div></div></div>",
+    htmlTemplate: "",
     activatedByChanged: function (activatedBy) {
       Survey.JsonObject.metaData.addClass("nouislidercustom", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("nouislidercustom", []);
@@ -42,7 +43,8 @@ function init(Survey, noUiSlider) {
 
     },
     afterRender: function (question, el) {
-            
+      el.classList.add("slider-custom");
+
       // List of pips value. 
       let initSlider = () => {
         let numberOfPoints = parseInt(question.numberOfPoints);
@@ -209,7 +211,7 @@ function init(Survey, noUiSlider) {
 }
 
 if (typeof Survey !== "undefined") {
-  init(Survey);
+  init(Survey, noUiSlider);
 }
 
 export default init;

@@ -1,3 +1,5 @@
+import * as Survey from "survey-core";
+
 function init(Survey) {
   var widget = {
     name: "likert",
@@ -109,6 +111,7 @@ function init(Survey) {
 
 if (typeof Survey !== "undefined") {
   init(Survey);
+  console.log("init likert widget");
 }else {
   console.log("Cannot init Likert widget");
 }

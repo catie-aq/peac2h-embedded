@@ -1,5 +1,6 @@
-import { CustomWidgetCollection } from "survey-core";
-  
+import noUiSlider from "nouislider";
+import * as Survey from "survey-core";
+
 function init(Survey, noUiSlider) {
   var widget = {
     name: "nouislider",
@@ -11,7 +12,7 @@ function init(Survey, noUiSlider) {
     isFit: function (question) {
       return question.getType() === "nouislider";
     },
-    htmlTemplate: "<div class='slider-standard'><div></div></div>",
+    htmlTemplate: "",
     activatedByChanged: function (activatedBy) {
       Survey.JsonObject.metaData.addClass("nouislider", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("nouislider", [
@@ -70,6 +71,9 @@ function init(Survey, noUiSlider) {
       ]);
     },
     afterRender: function (question, el) {
+
+      el.classList.add("slider-standard");
+
       var slider = noUiSlider.create(el, {
         start: question.value || (question.rangeMin + question.rangeMax) / 2,
         step: question.step,
@@ -160,12 +164,12 @@ function init(Survey, noUiSlider) {
     },
   };
   
-  // console.log(Survey);
   Survey.CustomWidgetCollection.Instance.add(widget, "customtype");
 }
 
 if (typeof Survey !== "undefined") {
-  init(Survey);
+  init(Survey, noUiSlider);
+  console.log("init noUiSlider widget");
 }
 
 export default init;

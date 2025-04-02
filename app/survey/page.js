@@ -7,20 +7,19 @@ import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
 import { useParams } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
-import { registerLikert } from '../../app/widgets/QuestionLikertModel';
-import { registerNoUiSliderCustom } from '../../app/widgets/QuestionSliderCustomModel';
-import { registerNoUiSliderTlx } from '../widgets/QuestionSliderTlxModel';
-import { registerNoUiSliderQuestion } from '../../app/widgets/QuestionSliderModel';
-import { registerLikertMatrix } from '../widgets/QuestionLikertMatrixModel';
 import theme from "../../app/survey-theme";
 
-const fetcher = (...args) => fetch(...args).then(res => res.json())
+import "../widgets/likert"
+import "../widgets/likertMatrix"
+import "../widgets/noUiWidget"
+import "../widgets/noUiWidget-Custom"
+import "../widgets/noUiWidget-TLX"
 
-registerLikert();
-registerNoUiSliderQuestion();
-registerNoUiSliderCustom();
-registerNoUiSliderTlx();
-registerLikertMatrix();
+import 'nouislider/dist/nouislider.css';
+import '../widgets/widgets.scss';
+
+
+const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 export default function Home() {
 
