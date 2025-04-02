@@ -169,7 +169,6 @@ function init(Survey, noUiSlider) {
 
 if (typeof Survey !== "undefined") {
   init(Survey, noUiSlider);
-  console.log("init noUiSlider widget");
 }
 
 export default init;
