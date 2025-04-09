@@ -14,7 +14,8 @@ import 'tippy.js/dist/tippy.css';
 import { Dialog, DialogContent } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { importStudy, deleteStudy } from '@/helpers/study_management';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { importStudy, deleteStudy, exportStudy } from '@/helpers/study_management';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -66,7 +67,7 @@ export default function Home() {
             }
           }
         }}
-        className="flex justify-end mr-4"
+        // className="flex justify-end mr-4"
       >
         <Tippy content="Supprimer l'étude">
           <CloseIcon color='error'/>
@@ -108,6 +109,37 @@ export default function Home() {
       >
         Valider
       </Button> 
+    )
+  }
+
+  function ExportStudyButton({study}) {
+    const { enqueueSnackbar } = useSnackbar();
+
+    function handleClickVariant(variant, message){
+      // variant could be success, error, warning, info, or default
+      enqueueSnackbar(message, { variant });
+    };
+
+    return (
+      <>
+      <button
+        onClick={async () => {
+          let res = await exportStudy(study);
+          if (res === "ok") {
+            // Succès
+            handleClickVariant('info', 'Étude exportée !');
+          } else {
+            // Erreur
+            handleClickVariant('error', 'Erreur lors de la suppression');
+          }
+        }}
+        // className="flex justify-end mr-4"
+      >
+        <Tippy content="Exporter l'étude">
+          <FileDownloadOutlinedIcon/>
+        </Tippy>
+      </button>
+      </>
     )
   }
 
@@ -169,9 +201,11 @@ export default function Home() {
                   <Card className="study-card">
                     <div className="study-card-header">
                       <span></span>
-                      <h3 className="flex justify-center gray-text"> Étude {study["id"]} </h3>
-                      
-                      <DeleteStudyButton id={study["id"]}/>
+                      <h3 className="flex justify-center items-center gray-text"> Étude {study["id"]} </h3>
+                      <div className='flex justify-end mr-4 gap-2'>
+                        <ExportStudyButton study={study}/>
+                        <DeleteStudyButton id={study["id"]}/>
+                      </div>
 
                     </div>
                     <h2 className='study-card-body'> Étude: { study["name"] }</h2>
