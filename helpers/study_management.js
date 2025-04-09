@@ -33,6 +33,40 @@ export async function importStudy(file, existingStudies, mutate) {
           throw new Error("Erreur HTTP: " + response.status);
         }
 
+        const study = parsedData;
+        study.groups.forEach((group, g_idx) => {
+          group.subjects.forEach(async (subject, s_idx) => {
+            await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: subject.name,
+                group: g_idx,
+                studyId: study.id,
+                id: subject.id
+              })
+            });
+            
+            group.time_periods.forEach(async (time_period, t_idx) => {
+              // check in each time_periods if the subject has result
+              time_period.experience_results.forEach(async (result, r_idx) => {
+                if (result.subject_id === subject.id && result.result!==null) {
+                  await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/${subject.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      [`result-S${time_period.position}`]: result.result,
+                      [`partial-S${time_period.position}`]: result.partial
+                    })
+                  });
+                }
+              });
+            });
+          });
+
+          
+        });
+
         // On force la revalidation SWR (si besoin)
         mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/studies/");
 
@@ -102,4 +136,62 @@ export async function deleteStudy(studyId, mutate) {
   mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/studies/");
 
   return "ok"
+}
+
+
+export async function exportStudy(study) {
+  let studySubjects = await fetch(process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/?studyId=${study.id}`)
+    .then(response => response.json())
+    .then(data => data) 
+    .catch((error) => {
+      console.error('Error:', error);
+      return error;
+    });
+
+  
+  let export_study = study;
+
+
+  studySubjects.forEach(subject => {
+    // console.log("subject_id", subject.id)
+    const subjectGroupPosition = subject.group;
+    const studyGroup = export_study.groups.find(group => group.position === subjectGroupPosition);
+    studyGroup.time_periods.forEach(time_period => {
+      time_period.experience_results.forEach(result => {
+        // console.log("result", result.id)
+        if (result.subject_id === subject.id) {
+          // put the result back in the experience_result
+          // console.log("find expe result for the subject", result.result)
+          // console.log("subject result", subject[`result-S${time_period.position}`])
+
+          result.result = subject[`result-S${time_period.position}`];
+          result.partial = subject[`partial-S${time_period.position}`];
+        }
+      });
+    })
+  });
+
+  // console.log("export_study", export_study)
+
+  // Combine study and its subjects
+  const exportData = {
+    study: export_study
+  };
+
+  // Convert to JSON string
+  const jsonString = JSON.stringify(exportData, null, 2);
+
+  // Create a Blob and download the file
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${study.name.replace(/\s+/g, '_')}_export.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  return "ok";
+
 }
