@@ -33,7 +33,9 @@ export async function importStudy(file, existingStudies, mutate) {
           throw new Error("Erreur HTTP: " + response.status);
         }
 
-        const study = parsedData;
+        // get the study imported with the id
+        const study = await response.json();
+
         study.groups.forEach((group, g_idx) => {
           group.subjects.forEach(async (subject, s_idx) => {
             await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/`, {
@@ -42,6 +44,7 @@ export async function importStudy(file, existingStudies, mutate) {
               body: JSON.stringify({
                 name: subject.name,
                 group: g_idx,
+                groupPeachApp: group["id"],
                 studyId: study.id,
                 id: subject.id
               })
@@ -152,30 +155,43 @@ export async function exportStudy(study) {
   let export_study = study;
 
 
-  studySubjects.forEach(subject => {
-    // console.log("subject_id", subject.id)
-    const subjectGroupPosition = subject.group;
-    const studyGroup = export_study.groups.find(group => group.position === subjectGroupPosition);
-    studyGroup.time_periods.forEach(time_period => {
-      time_period.experience_results.forEach(result => {
-        // console.log("result", result.id)
-        if (result.subject_id === subject.id) {
-          // put the result back in the experience_result
-          // console.log("find expe result for the subject", result.result)
-          // console.log("subject result", subject[`result-S${time_period.position}`])
+  // studySubjects.forEach(subject => {
+  //   // console.log("subject_id", subject.id)
+  //   const subjectGroupPosition = subject.group;
+  //   const studyGroup = export_study.groups.find(group => group.position === subjectGroupPosition);
+  //   studyGroup.time_periods.forEach(time_period => {
+  //     time_period.experience_results.forEach(result => {
 
-          result.result = subject[`result-S${time_period.position}`];
-          result.partial = subject[`partial-S${time_period.position}`];
-        }
-      });
-    })
-  });
+  //       // console.log("result", result.id)
+  //       // if (result.subject_id === subject.id) {
+  //       //   // put the result back in the experience_result
+  //       //   // console.log("find expe result for the subject", result.result)
+  //       //   // console.log("subject result", subject[`result-S${time_period.position}`])
+  //       //   return;
+  //       //   // result.result = subject[`result-S${time_period.position}`];
+  //       //   // result.partial = subject[`partial-S${time_period.position}`];
+  //       // }
+
+  //       // case this is a new subject created in this app and there is no experience_result for it
+  //       // else {
+  //       //   time_period.experience_results.push({
+  //       //     id: null,
+  //       //     subject_id: subject.id,
+  //       //     result: subject[`result-S${time_period.position}`] || null,
+  //       //     partial: subject[`partial-S${time_period.position}`] || null
+  //       //   });
+  //       // }
+  //     });
+
+  //   })
+  // });
 
   // console.log("export_study", export_study)
 
   // Combine study and its subjects
   const exportData = {
-    study: export_study
+    study: export_study,
+    subjects : studySubjects
   };
 
   // Convert to JSON string
