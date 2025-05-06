@@ -36,39 +36,7 @@ export async function importStudy(file, existingStudies, mutate) {
         // get the study imported with the id
         const study = await response.json();
 
-        study.groups.forEach((group, g_idx) => {
-          group.subjects.forEach(async (subject, s_idx) => {
-            await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: subject.name,
-                group: g_idx,
-                groupPeachApp: group["id"],
-                studyId: study.id,
-                id: subject.id
-              })
-            });
-            
-            group.time_periods.forEach(async (time_period, t_idx) => {
-              // check in each time_periods if the subject has result
-              time_period.experience_results.forEach(async (result, r_idx) => {
-                if (result.subject_id === subject.id && result.result!==null) {
-                  await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/${subject.id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      [`result-S${time_period.position}`]: result.result,
-                      [`partial-S${time_period.position}`]: result.partial
-                    })
-                  });
-                }
-              });
-            });
-          });
-
-          
-        });
+        importSubjects(study);
 
         // On force la revalidation SWR (si besoin)
         mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/studies/");
@@ -88,6 +56,89 @@ export async function importStudy(file, existingStudies, mutate) {
 
     // Lance la lecture du fichier
     reader.readAsText(file);
+  });
+}
+
+const peachUrl = "http://localhost:5000/api/experimental_studies/"
+
+export async function importStudyWithAPIKey(id, api_key, existingStudies, mutate) {
+  // console.log("id", id)
+  // console.log("api_key", api_key)
+  const response = await fetch(peachUrl + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${api_key}`
+    }
+  });
+
+  if (!response.ok) {
+    return `Erreur lors de la récupération de l'étude: ${response.statusText}`;
+  }
+
+  const study = await response.json();
+
+  // console.log(study)
+  const study_name = study["name"];
+  const alreadyExists = existingStudies.some(study => study.name === study_name);
+  if (alreadyExists) {
+    return { status: "exists", study_name };
+  }
+
+  // On envoie la requête
+  const response2 = await fetch(process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/studies", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(study, null, 2)
+  });
+
+  if (!response2.ok) {
+    return `Erreur lors de l'import de l'étude: ${response2.statusText}`;
+  }
+
+  const importedStudy = await response2.json();
+  // console.log(importedStudy)
+
+  importSubjects(importedStudy);
+  
+  mutate(process.env.NEXT_PUBLIC_JSON_SERVER_URL + "/studies/");
+
+  return "ok";
+}
+
+function importSubjects(study) {
+  study.groups.forEach((group, g_idx) => {
+    group.subjects.forEach(async (subject, s_idx) => {
+      await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: subject.name,
+          group: g_idx,
+          groupPeachApp: group["id"],
+          studyId: study.id,
+          id: subject.id
+        })
+      });
+      
+      group.time_periods.forEach(async (time_period, t_idx) => {
+        // check in each time_periods if the subject has result
+        time_period.experience_results.forEach(async (result, r_idx) => {
+          if (result.subject_id === subject.id && result.result!==null) {
+            await fetch (process.env.NEXT_PUBLIC_JSON_SERVER_URL + `/subjects/${subject.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                [`result-S${time_period.position}`]: result.result,
+                [`partial-S${time_period.position}`]: result.partial
+              })
+            });
+          }
+        });
+      });
+    });
+
+    
   });
 }
 
