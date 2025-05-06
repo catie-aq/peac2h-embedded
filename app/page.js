@@ -11,10 +11,11 @@ import { useRouter } from 'next/navigation'
 import { SnackbarProvider, VariantType, useSnackbar } from 'notistack';
 import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, TextField, Divider } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { importStudy, deleteStudy } from '@/helpers/study_management';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { importStudy, deleteStudy, exportStudy, importStudyWithAPIKey } from '@/helpers/study_management';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -25,6 +26,8 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedName, setSelectedName] = useState("");
   const [open, setOpen] = useState(false);
+  const [apiKey, setApiKey] = useState(null);
+  const [studyId, setStudyId] = useState(null);
 
 
   const handleFileChange = (event) => {
@@ -66,7 +69,7 @@ export default function Home() {
             }
           }
         }}
-        className="flex justify-end mr-4"
+        // className="flex justify-end mr-4"
       >
         <Tippy content="Supprimer l'étude">
           <CloseIcon color='error'/>
@@ -111,6 +114,74 @@ export default function Home() {
     )
   }
 
+  function ExportStudyButton({study}) {
+    const { enqueueSnackbar } = useSnackbar();
+
+    function handleClickVariant(variant, message){
+      // variant could be success, error, warning, info, or default
+      enqueueSnackbar(message, { variant });
+    };
+
+    return (
+      <>
+      <button
+        onClick={async () => {
+          let res = await exportStudy(study);
+          if (res === "ok") {
+            // Succès
+            handleClickVariant('info', 'Étude exportée !');
+          } else {
+            // Erreur
+            handleClickVariant('error', 'Erreur lors de la suppression');
+          }
+        }}
+        // className="flex justify-end mr-4"
+      >
+        <Tippy content="Exporter l'étude">
+          <FileDownloadOutlinedIcon/>
+        </Tippy>
+      </button>
+      </>
+    )
+  }
+
+  
+
+  function ImportWithAPIKeyButton({id, api_key}) {
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    function handleClickVariant(variant, message){
+      // variant could be success, error, warning, info, or default
+      enqueueSnackbar(message, { variant });
+    };
+
+    return (
+      <Button 
+        className='white-button mt-4'
+        justify="center"
+        onClick={async () => {
+          let res = await importStudyWithAPIKey(id, api_key, data, mutate)
+          setStudyId(null);
+          setApiKey(null);
+          setOpen(false);
+          if (res === "ok") {
+            // Succès
+            handleClickVariant('success', 'Étude ajoutée !');
+          } else if (res.status === "exists") {
+            // Étude déjà existante
+            handleClickVariant('error', 'Erreur : Étude déjà existante: ' + res.study_name);
+          } else {
+            // Aucun fichier
+            handleClickVariant('error', res);
+          }
+        }}
+        >
+          Importer via une clé d'api
+      </Button>
+    )
+  }
+
 
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
@@ -119,6 +190,8 @@ export default function Home() {
         open={open}
         onClose={handleClose}>
         <DialogContent className="w-[40em] mb-8 mt-4">
+
+          <h2 className='text-2xl mb-4 bold-text'>Via un fichier JSON</h2>
           <div className="file-upload">
             {/* <img src={uploadImg} alt="upload" /> */}
             
@@ -140,11 +213,36 @@ export default function Home() {
             </div>
           </div>
 
+
+
           <h3 className='flex justify-center mt-4'> {selectedName || "Aucun fichier sélectionné"}</h3>
           
-          <div className="flex mt-4 justify-center">
+          <div className="flex mt-4 mb-8 justify-center">
             <ImportStudyButton/>
-          </div>        
+          </div> 
+
+          <Divider/>
+
+          <h2 className='text-2xl mt-8 mb-4 bold-text'>Via une clé d'API</h2>
+          <div className='flex justify-around mt-4 gap-2'>
+            <TextField  onChange={e => {
+              setStudyId(e.target.value)
+            }} label="ID">
+
+            </TextField>
+
+
+            <TextField  onChange={e => {
+              setApiKey(e.target.value)
+            }} label="Clé d'API">
+            </TextField>
+          </div>
+
+          
+          <div className="flex mt-4 justify-center">
+            <ImportWithAPIKeyButton id={studyId} api_key={apiKey}/>
+          </div>
+                 
         </DialogContent>
       </Dialog>
       
@@ -157,6 +255,8 @@ export default function Home() {
             <Button className='white-button white-button-big mb-8' onClick={() => setOpen(true)}>
               Importer une étude
             </Button>
+
+            
           </div>
 
           <h2 className='text-2xl mt-8 mb-4 bold-text'> Mes études</h2>
@@ -169,9 +269,11 @@ export default function Home() {
                   <Card className="study-card">
                     <div className="study-card-header">
                       <span></span>
-                      <h3 className="flex justify-center gray-text"> Étude {study["id"]} </h3>
-                      
-                      <DeleteStudyButton id={study["id"]}/>
+                      <h3 className="flex justify-center items-center gray-text"> Étude {study["id"]} </h3>
+                      <div className='flex justify-end mr-4 gap-2'>
+                        <ExportStudyButton study={study}/>
+                        <DeleteStudyButton id={study["id"]}/>
+                      </div>
 
                     </div>
                     <h2 className='study-card-body'> Étude: { study["name"] }</h2>

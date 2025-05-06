@@ -43,7 +43,7 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
     return (
       <Button className="white-button"
       onClick={async () => {
-        let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate);
+        let res = await createSubject(allSubjects, userId, setuserId, group, g_idx, studyId, mutate);
         if(res == "ok"){
           handleClickVariant('success','Sujet créé !');
         }
@@ -221,7 +221,7 @@ export default function Group({group, g_idx, studyId, subjects, allSubjects, mut
               className="max-w-xs"
               onKeyDown={async(e) => {
                 if (e.key === 'Enter') {
-                  let res = await createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutate);
+                  let res = await createSubject(allSubjects, userId, setuserId, group, g_idx, studyId, mutate);
                   if(res == "ok"){
                     handleClickVariant('success','Sujet créé !');
                   }

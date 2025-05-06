@@ -1,4 +1,4 @@
-export async function createSubject(allSubjects, userId, setuserId, g_idx, studyId, mutateAllSubjects) {
+export async function createSubject(allSubjects, userId, setuserId, group, g_idx, studyId, mutateAllSubjects) {
   const alreadyExists = allSubjects.find(subject => 
     subject.name === userId &&
     subject.studyId === studyId
@@ -21,6 +21,7 @@ export async function createSubject(allSubjects, userId, setuserId, g_idx, study
     body: JSON.stringify({
       name: userId, // name instead of id to avoid duplicate ids within multiple studies, maybe to reconsider
       group: g_idx,
+      groupPeachApp: group["id"],
       studyId: studyId
     })
   })
